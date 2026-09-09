@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Hangul">
+<title>Hangul lernen</title>
+<style>
+:root{
+  --paper:#FFFFFF; --ink:#141A2E; --mute:#6B7186; --line:#E4E6EE;
+  --blau:#2748A6; --rot:#C7362F; --gelb:#F2C14E; --blauhell:#EEF2FC; --rothell:#FBEDEB;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:-apple-system,"Apple SD Gothic Neo","Helvetica Neue",Arial,"Noto Sans KR",sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+header{padding:calc(20px + env(safe-area-inset-top)) 20px 12px;border-bottom:1px solid var(--line)}
+header h1{font-size:34px;font-weight:700;letter-spacing:-.5px;line-height:1}
+header p{color:var(--mute);font-size:14px;margin-top:6px}
+main{padding:16px 16px 24px;max-width:560px;margin:0 auto}
+.view{display:none}.view.on{display:block}
+
+/* Navigation */
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;padding:12px 4px 10px;border:0;background:none;font:inherit;font-size:12px;color:var(--mute);cursor:pointer}
+nav button .k{display:block;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:2px}
+nav button.on{color:var(--blau)}nav button.on .k{color:var(--blau)}
+
+/* Alphabet */
+h2{font-size:17px;font-weight:700;margin:20px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cell{border:1px solid var(--line);border-radius:12px;padding:10px 4px 8px;text-align:center;background:none;font:inherit;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cell b{display:block;font-size:30px;font-weight:600;line-height:1.15}
+.cell span{display:block;font-size:13px;color:var(--mute);margin-top:2px}
+.cell.v b{color:var(--rot)}.cell.c b{color:var(--blau)}
+.detail{position:fixed;inset:0;background:rgba(20,26,46,.45);display:none;align-items:flex-end;z-index:10}
+.detail.on{display:flex}
+.sheet{background:var(--paper);width:100%;border-radius:20px 20px 0 0;padding:24px 24px calc(28px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
+.sheet .big{font-size:96px;font-weight:600;line-height:1;text-align:center;margin-bottom:8px}
+.sheet .rom{text-align:center;font-size:24px;font-weight:700;margin-bottom:6px}
+.sheet .hint{text-align:center;color:var(--mute);font-size:16px;line-height:1.45}
+.sheet .ex{margin-top:16px;padding:12px;border-radius:12px;background:var(--blauhell);font-size:16px;text-align:center}
+.sheet .ex b{font-size:22px}
+.sheet button{margin-top:16px;width:100%}
+.spk{display:inline-flex;align-items:center;gap:6px;margin:10px auto 0;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font:inherit;font-size:15px;color:var(--blau);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.spk.big{padding:11px 20px;font-size:16px}
+.spkrow{display:flex;justify-content:center;gap:8px}
+.sheet .spk{margin-top:0}
+.nov{color:var(--mute);font-size:13px;text-align:center;margin-top:8px}
+
+/* Buttons */
+.btn{display:block;width:100%;padding:14px;border-radius:12px;border:0;font:inherit;font-size:16px;font-weight:600;background:var(--ink);color:#fff;cursor:pointer}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+.seg{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.seg button{flex:1;padding:11px;border:0;background:none;font:inherit;font-size:14px;color:var(--mute);cursor:pointer}
+.seg button.on{background:var(--ink);color:#fff}
+
+/* Quiz */
+.card{border:1px solid var(--line);border-radius:20px;padding:36px 20px 28px;text-align:center}
+.card .q{font-size:88px;font-weight:600;line-height:1;min-height:96px}
+.card .q.lat{font-size:56px}
+.card .ask{color:var(--mute);font-size:14px;margin-top:10px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.opts button{padding:18px 8px;border-radius:14px;border:1px solid var(--line);background:none;font:inherit;font-size:28px;font-weight:600;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.opts button.ok{background:var(--blau);border-color:var(--blau);color:#fff}
+.opts button.no{background:var(--rothell);border-color:var(--rot);color:var(--rot)}
+.score{display:flex;justify-content:space-between;color:var(--mute);font-size:14px;margin-top:14px}
+.score b{color:var(--ink)}
+.chk{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}
+.chk label{font-size:14px;border:1px solid var(--line);border-radius:999px;padding:7px 12px;display:flex;gap:6px;align-items:center}
+.chk input{accent-color:var(--blau)}
+
+/* Übersetzen */
+textarea{width:100%;min-height:96px;padding:14px;border-radius:14px;border:1px solid var(--line);font:inherit;font-size:22px;resize:vertical;outline:none;background:var(--paper);color:var(--ink)}
+textarea:focus{border-color:var(--blau)}
+.out{margin-top:12px;padding:16px;border-radius:14px;background:var(--blauhell);font-size:30px;line-height:1.4;min-height:64px;word-break:break-word;user-select:text;-webkit-user-select:text}
+.out.empty{color:var(--mute);font-size:15px}
+.note{color:var(--mute);font-size:13px;line-height:1.5;margin-top:10px}
+.syl{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.syl span{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:14px}
+.syl span b{font-size:18px;margin-right:6px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1 id="title">Hangul lernen</h1>
+  <p id="sub">Das koreanische Alphabet – Zeichen, Laute und Umschrift.</p>
+</header>
+
+<main>
+
+<!-- ALPHABET -->
+<section id="v-abc" class="view on">
+  <h2>Grundkonsonanten (14)</h2><div class="grid" id="g-c"></div>
+  <h2>Doppelkonsonanten (5)</h2><div class="grid" id="g-cc"></div>
+  <h2>Grundvokale (10)</h2><div class="grid" id="g-v"></div>
+  <h2>Zusammengesetzte Vokale (11)</h2><div class="grid" id="g-vv"></div>
+  <p class="note">Tippe ein Zeichen für Aussprache und Beispiel. Blau = Konsonant, Rot = Vokal.</p>
+</section>
+
+<!-- ÜBEN -->
+<section id="v-quiz" class="view">
+  <div class="seg" id="dir">
+    <button data-d="kd" class="on">Koreanisch → Deutsch</button>
+    <button data-d="dk">Deutsch → Koreanisch</button>
+  </div>
+  <div class="chk">
+    <label><input type="checkbox" id="s-c" checked> Konsonanten</label>
+    <label><input type="checkbox" id="s-cc"> Doppelkonsonanten</label>
+    <label><input type="checkbox" id="s-v" checked> Vokale</label>
+    <label><input type="checkbox" id="s-vv"> Zusammengesetzte Vokale</label>
+  </div>
+  <div class="card">
+    <div class="q" id="q"></div>
+    <div class="ask" id="ask"></div>
+    <button class="spk" id="q-say">🔊 Anhören</button>
+  </div>
+  <div class="opts" id="opts"></div>
+  <div class="score"><span>Richtig: <b id="sc-ok">0</b></span><span>Serie: <b id="sc-streak">0</b></span><span>Gesamt: <b id="sc-all">0</b></span></div>
+</section>
+
+<!-- ÜBERSETZEN -->
+<section id="v-tr" class="view">
+  <div class="seg" id="trdir">
+    <button data-d="kd" class="on">Koreanisch → Umschrift</button>
+    <button data-d="dk">Umschrift → Koreanisch</button>
+  </div>
+  <textarea id="inp" placeholder="안녕하세요" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
+  <div class="out empty" id="out">Ergebnis erscheint hier.</div>
+  <div class="syl" id="syl"></div>
+  <div class="spkrow"><button class="spk big" id="tr-say">🔊 Koreanisch anhören</button></div>
+  <p class="nov" id="nov"></p>
+  <p class="note" id="trnote"></p>
+</section>
+
+</main>
+
+<nav>
+  <button class="on" data-v="abc"><span class="k">가</span>Alphabet</button>
+  <button data-v="quiz"><span class="k">?</span>Üben</button>
+  <button data-v="tr"><span class="k">⇄</span>Übersetzen</button>
+</nav>
+
+<div class="detail" id="detail">
+  <div class="sheet">
+    <div class="big" id="d-big"></div>
+    <div class="rom" id="d-rom"></div>
+    <div class="hint" id="d-hint"></div>
+    <div class="ex" id="d-ex"></div>
+    <div class="spkrow" style="margin-top:14px">
+      <button class="spk" id="d-say">🔊 Laut anhören</button>
+      <button class="spk" id="d-sayex">🔊 Beispiel anhören</button>
+    </div>
+    <button class="btn ghost" id="d-close">Schließen</button>
+  </div>
+</div>
+
+<script>
+// ---------- Daten ----------
+// [Zeichen, Umschrift, deutsche Aussprachehilfe, Beispiel-Hangul, Beispiel-Umschrift/Bedeutung]
+const C=[
+ ['ㄱ','g / k','Zwischen G und K, am Silbenende K.','가방','gabang – Tasche'],
+ ['ㄴ','n','Wie deutsches N.','나무','namu – Baum'],
+ ['ㄷ','d / t','Zwischen D und T, am Silbenende T.','다리','dari – Brücke, Bein'],
+ ['ㄹ','r / l','Am Silbenanfang leicht gerolltes R, am Ende L.','라면','ramyeon – Ramen'],
+ ['ㅁ','m','Wie deutsches M.','물','mul – Wasser'],
+ ['ㅂ','b / p','Zwischen B und P, am Silbenende P.','바다','bada – Meer'],
+ ['ㅅ','s / t','Wie S (vor i wie „sch"), am Silbenende T.','사람','saram – Mensch'],
+ ['ㅇ','– / ng','Am Anfang stumm (Platzhalter), am Ende NG wie in „lang".','아이','ai – Kind'],
+ ['ㅈ','j / t','Wie „dsch" in Dschungel, am Silbenende T.','집','jip – Haus'],
+ ['ㅊ','ch / t','Wie „tsch" in Tschüss, mit Hauch.','차','cha – Tee, Auto'],
+ ['ㅋ','k','Hartes K mit deutlichem Hauch.','코','ko – Nase'],
+ ['ㅌ','t','Hartes T mit deutlichem Hauch.','토끼','tokki – Hase'],
+ ['ㅍ','p','Hartes P mit deutlichem Hauch.','포도','podo – Weintraube'],
+ ['ㅎ','h','Wie deutsches H.','하늘','haneul – Himmel'],
+];
+const CC=[
+ ['ㄲ','kk','Angespanntes, hartes K ohne Hauch.','꿈','kkum – Traum'],
+ ['ㄸ','tt','Angespanntes, hartes T ohne Hauch.','딸기','ttalgi – Erdbeere'],
+ ['ㅃ','pp','Angespanntes, hartes P ohne Hauch.','빵','ppang – Brot'],
+ ['ㅆ','ss','Scharfes, angespanntes S.','쌀','ssal – Reis (roh)'],
+ ['ㅉ','jj','Angespanntes „dsch" ohne Hauch.','짜다','jjada – salzig'],
+];
+const V=[
+ ['ㅏ','a','Wie A in „Vater".','아','a'],
+ ['ㅑ','ya','Wie „ja".','야','ya'],
+ ['ㅓ','eo','Offenes O wie in „Sonne", Richtung „ö/a".','어','eo'],
+ ['ㅕ','yeo','Wie „jo" mit offenem O.','여','yeo'],
+ ['ㅗ','o','Geschlossenes O wie in „Boot".','오','o'],
+ ['ㅛ','yo','Wie „jo" mit geschlossenem O.','요','yo'],
+ ['ㅜ','u','Wie U in „Mut".','우','u'],
+ ['ㅠ','yu','Wie „ju".','유','yu'],
+ ['ㅡ','eu','Ungerundetes Ü – Lippen wie bei I, Zunge wie bei U.','으','eu'],
+ ['ㅣ','i','Wie I in „Kino".','이','i'],
+];
+const VV=[
+ ['ㅐ','ae','Wie Ä in „Bär".','애','ae'],
+ ['ㅒ','yae','Wie „jä".','얘','yae'],
+ ['ㅔ','e','Wie E in „Bett" (heute wie ㅐ).','에','e'],
+ ['ㅖ','ye','Wie „je".','예','ye'],
+ ['ㅘ','wa','Wie „wa" in „Waage" (mit U-Anlaut).','와','wa'],
+ ['ㅙ','wae','Wie „wä".','왜','wae'],
+ ['ㅚ','oe','Wie „we" – klingt heute wie ㅞ.','외','oe'],
+ ['ㅝ','wo','Wie „wo" mit offenem O.','워','wo'],
+ ['ㅞ','we','Wie „we".','웨','we'],
+ ['ㅟ','wi','Wie „wi".','위','wi'],
+ ['ㅢ','ui','ㅡ+ㅣ schnell hintereinander.','의','ui'],
+];
+
+const JAMO_C='ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ',JAMO_V='ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ';
+// ---------- Sprachausgabe ----------
+const synth=window.speechSynthesis;let koVoice=null;
+function pickVoice(){
+  if(!synth)return;
+  const vs=synth.getVoices();
+  koVoice=vs.find(v=>v.lang==='ko-KR')||vs.find(v=>v.lang.toLowerCase().startsWith('ko'))||null;
+  const nov=document.getElementById('nov');
+  if(nov)nov.textContent=koVoice?'':'Keine koreanische Stimme gefunden. Unter Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Koreanisch laden.';
+}
+if(synth){pickVoice();synth.onvoiceschanged=pickVoice}
+// Einzelne Jamo klingen isoliert schlecht – als Silbe mit ㅏ bzw. ㅇ sprechen.
+function speakable(x){
+  if(x.length>1)return x;
+  const ci=JAMO_C.indexOf(x),vi=JAMO_V.indexOf(x);
+  if(ci>=0)return String.fromCharCode(0xAC00+ci*588);       // Konsonant + ㅏ
+  if(vi>=0)return String.fromCharCode(0xAC00+11*588+vi*28); // ㅇ + Vokal
+  return x;
+}
+function say(text,rate){
+  if(!synth||!text)return;
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='ko-KR';if(koVoice)u.voice=koVoice;u.rate=rate||0.85;
+  synth.speak(u);
+}
+
+// ---------- Alphabet-Ansicht ----------
+function fill(id,list,cls){
+  const g=document.getElementById(id);
+  list.forEach(x=>{
+    const b=document.createElement('button');b.className='cell '+cls;
+    b.innerHTML=`<b>${x[0]}</b><span>${x[1]}</span>`;
+    b.onclick=()=>show(x);g.appendChild(b);
+  });
+}
+fill('g-c',C,'c');fill('g-cc',CC,'c');fill('g-v',V,'v');fill('g-vv',VV,'v');
+const det=document.getElementById('detail');
+function show(x){
+  document.getElementById('d-big').textContent=x[0];
+  document.getElementById('d-rom').textContent=x[1];
+  document.getElementById('d-hint').textContent=x[2];
+  document.getElementById('d-ex').innerHTML=`<b>${x[3]}</b><br>${x[4]}`;
+  document.getElementById('d-say').onclick=()=>say(speakable(x[0]),0.7);
+  document.getElementById('d-sayex').onclick=()=>say(x[3]);
+  det.classList.add('on');
+}
+document.getElementById('d-close').onclick=()=>det.classList.remove('on');
+det.onclick=e=>{if(e.target===det)det.classList.remove('on')};
+
+// ---------- Navigation ----------
+const subs={abc:'Das koreanische Alphabet – Zeichen, Laute und Umschrift.',quiz:'Zeichen und Laute zuordnen.',tr:'Wörter in beide Richtungen umschreiben.'};
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v));
+  document.getElementById('sub').textContent=subs[b.dataset.v];
+  if(b.dataset.v==='quiz')next();
+  window.scrollTo(0,0);
+});
+
+// ---------- Quiz ----------
+let dir='kd',cur=null,locked=false,ok=0,all=0,streak=0;
+document.querySelectorAll('#dir button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#dir button').forEach(x=>x.classList.toggle('on',x===b));dir=b.dataset.d;next();
+});
+['s-c','s-cc','s-v','s-vv'].forEach(id=>document.getElementById(id).onchange=next);
+function pool(){
+  let p=[];
+  if(document.getElementById('s-c').checked)p=p.concat(C);
+  if(document.getElementById('s-cc').checked)p=p.concat(CC);
+  if(document.getElementById('s-v').checked)p=p.concat(V);
+  if(document.getElementById('s-vv').checked)p=p.concat(VV);
+  if(p.length<4)p=C.concat(V);
+  return p;
+}
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+function next(){
+  locked=false;const p=pool();
+  let c;do{c=rnd(p)}while(c===cur&&p.length>1);cur=c;
+  const others=new Set([c]);while(others.size<4)others.add(rnd(p));
+  const opts=[...others].sort(()=>Math.random()-.5);
+  const q=document.getElementById('q');
+  q.textContent=dir==='kd'?c[0]:c[1];q.classList.toggle('lat',dir!=='kd');
+  document.getElementById('q-say').style.display=dir==='kd'?'':'none';
+  document.getElementById('ask').textContent=dir==='kd'?'Wie wird das umschrieben?':'Welches Zeichen ist das?';
+  const o=document.getElementById('opts');o.innerHTML='';
+  opts.forEach(x=>{
+    const b=document.createElement('button');b.textContent=dir==='kd'?x[1]:x[0];
+    b.onclick=()=>answer(b,x===c);o.appendChild(b);
+  });
+}
+document.getElementById('q-say').onclick=()=>{if(cur)say(speakable(cur[0]),0.7)};
+function answer(b,right){
+  if(locked)return;locked=true;all++;
+  if(right){ok++;streak++;b.classList.add('ok')}
+  else{streak=0;b.classList.add('no');
+    [...document.getElementById('opts').children].forEach(x=>{if(x.textContent===(dir==='kd'?cur[1]:cur[0]))x.classList.add('ok')});}
+  document.getElementById('sc-ok').textContent=ok;document.getElementById('sc-all').textContent=all;document.getElementById('sc-streak').textContent=streak;
+  setTimeout(next,right?600:1400);
+}
+
+// ---------- Umschrift ----------
+const LEAD=['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'];
+const VOW=['a','ae','ya','yae','eo','e','yeo','ye','o','wa','wae','oe','yo','u','wo','we','wi','yu','eu','ui','i'];
+const TAIL=['','k','k','k','n','n','n','t','l','k','m','l','l','l','p','l','m','p','p','t','t','ng','t','t','k','t','p','t'];
+
+function korToLat(s){
+  let out='',parts=[];
+  for(const ch of s){
+    const c=ch.codePointAt(0);
+    if(c>=0xAC00&&c<=0xD7A3){
+      const x=c-0xAC00,l=Math.floor(x/588),v=Math.floor((x%588)/28),t=x%28;
+      const r=LEAD[l]+VOW[v]+TAIL[t];out+=r;parts.push([ch,r]);
+    }else if(JAMO_C.includes(ch)){out+=LEAD[JAMO_C.indexOf(ch)]||'ng'}
+    else if(JAMO_V.includes(ch)){out+=VOW[JAMO_V.indexOf(ch)]}
+    else out+=ch;
+  }
+  return {text:out,parts};
+}
+
+// Umschrift → Hangul
+const LEADMAP={g:0,kk:1,n:2,d:3,tt:4,r:5,l:5,m:6,b:7,pp:8,s:9,ss:10,j:12,jj:13,ch:14,k:15,t:16,p:17,h:18};
+const TAILMAP={k:1,g:1,kk:2,n:4,t:7,d:7,l:8,r:8,m:16,p:17,b:17,s:19,ss:20,ng:21,j:22,ch:23,h:27};
+const CONS=Object.keys(LEADMAP).concat(['ng']).sort((a,b)=>b.length-a.length);
+const VOWS=[...VOW].sort((a,b)=>b.length-a.length);
+const isV=ch=>'aeiouyw'.includes(ch);
+function match(s,i,list){for(const t of list)if(s.startsWith(t,i))return t;return null}
+function latToKor(src){
+  let out='',i=0;const s=src.toLowerCase();
+  while(i<s.length){
+    const ch=s[i];
+    if(ch==='-'){i++;continue}
+    if(!/[a-z]/.test(ch)){out+=ch;i++;continue}
+    // Anlaut
+    let lead=11,c=match(s,i,CONS.filter(x=>x!=='ng'));
+    if(c&&!isV(c[0])){lead=LEADMAP[c];i+=c.length}
+    // Vokal
+    const v=match(s,i,VOWS);
+    if(!v){ // Konsonant ohne Vokal → einzelner Jamo
+      out+=c?JAMO_C[lead]:ch;if(!c)i++;continue;
+    }
+    i+=v.length;const vi=VOW.indexOf(v);
+    // Auslaut: nur wenn danach kein Vokal folgt
+    let tail=0,t=match(s,i,CONS);
+    if(t&&TAILMAP[t]!==undefined){
+      const after=i+t.length;
+      const nextIsV=after<s.length&&isV(s[after])&&match(s,after,VOWS);
+      if(!nextIsV){tail=TAILMAP[t];i+=t.length}
+      else if(t==='ng'){tail=TAILMAP.ng;i+=2}
+      else if(t.length>1&&TAILMAP[t[0]]!==undefined&&t!=='ch'){ /* z.B. "nm": n als Auslaut */ tail=TAILMAP[t[0]];i+=1}
+    }
+    out+=String.fromCharCode(0xAC00+lead*588+vi*28+tail);
+  }
+  return out;
+}
+
+let trdir='kd';
+const inp=document.getElementById('inp'),outEl=document.getElementById('out'),sylEl=document.getElementById('syl'),trnote=document.getElementById('trnote');
+const notes={kd:'Umschrift nach der revidierten Romanisierung: eo = offenes O, eu = ungerundetes Ü, ae = Ä. Auslaute klingen verschlossen (k, t, p).',
+ dk:'Schreibe Silben mit Bindestrich, wenn die Trennung unklar ist, z. B. „han-guk" statt „hanguk". ng am Silbenende wird zu ㅇ.'};
+document.querySelectorAll('#trdir button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#trdir button').forEach(x=>x.classList.toggle('on',x===b));trdir=b.dataset.d;
+  inp.placeholder=trdir==='kd'?'안녕하세요':'annyeonghaseyo';trnote.textContent=notes[trdir];inp.value='';run();
+});
+trnote.textContent=notes.kd;
+function run(){
+  const s=inp.value.trim();sylEl.innerHTML='';
+  if(!s){outEl.className='out empty';outEl.textContent='Ergebnis erscheint hier.';return}
+  outEl.className='out';
+  if(trdir==='kd'){
+    const r=korToLat(s);outEl.textContent=r.text;
+    r.parts.forEach(p=>{const e=document.createElement('span');e.innerHTML=`<b>${p[0]}</b>${p[1]}`;sylEl.appendChild(e)});
+  }else{
+    const k=latToKor(s);outEl.textContent=k;
+    const back=korToLat(k).text;
+    if(back.replace(/[^a-z]/g,'')!==s.toLowerCase().replace(/[^a-z]/g,'')){
+      const e=document.createElement('span');e.textContent='Rückübersetzung: '+back;sylEl.appendChild(e);
+    }
+  }
+}
+inp.oninput=run;
+document.getElementById('tr-say').onclick=()=>{const s=inp.value.trim();if(!s)return;say(trdir==='kd'?s:latToKor(s))};
+</script>
+</body>
+</html>

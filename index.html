@@ -23,7 +23,7 @@ main{padding:16px 16px 24px;max-width:560px;margin:0 auto}
 
 /* Navigation */
 nav{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
-nav button{flex:1;padding:12px 4px 10px;border:0;background:none;font:inherit;font-size:12px;color:var(--mute);cursor:pointer}
+nav button{flex:1;padding:12px 2px 10px;border:0;background:none;font:inherit;font-size:11px;color:var(--mute);cursor:pointer}
 nav button .k{display:block;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:2px}
 nav button.on{color:var(--blau)}nav button.on .k{color:var(--blau)}
 
@@ -33,12 +33,16 @@ h2{font-size:17px;font-weight:700;margin:20px 0 8px}
 .cell{border:1px solid var(--line);border-radius:12px;padding:10px 4px 8px;text-align:center;background:none;font:inherit;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .cell b{display:block;font-size:30px;font-weight:600;line-height:1.15}
 .cell span{display:block;font-size:13px;color:var(--mute);margin-top:2px}
+.cell b.two{display:flex;justify-content:center;align-items:baseline;gap:6px}
+.cell b.two .jamo{opacity:.55;font-size:26px}
 .cell.v b{color:var(--rot)}.cell.c b{color:var(--blau)}
 .detail{position:fixed;inset:0;background:rgba(20,26,46,.45);display:none;align-items:flex-end;z-index:10}
 .detail.on{display:flex}
 .sheet{background:var(--paper);width:100%;border-radius:20px 20px 0 0;padding:24px 24px calc(28px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
 .sheet .big{font-size:96px;font-weight:600;line-height:1;text-align:center;margin-bottom:8px}
+.sheet .big .jamo{opacity:.55;font-size:72px}
 .sheet .rom{text-align:center;font-size:24px;font-weight:700;margin-bottom:6px}
+.sheet .rom .jm{display:block;font-size:13px;font-weight:400;color:var(--mute);margin-top:4px}
 .sheet .hint{text-align:center;color:var(--mute);font-size:16px;line-height:1.45}
 .sheet .ex{margin-top:16px;padding:12px;border-radius:12px;background:var(--blauhell);font-size:16px;text-align:center}
 .sheet .ex b{font-size:22px}
@@ -60,9 +64,11 @@ h2{font-size:17px;font-weight:700;margin:20px 0 8px}
 .card{border:1px solid var(--line);border-radius:20px;padding:36px 20px 28px;text-align:center}
 .card .q{font-size:88px;font-weight:600;line-height:1;min-height:96px}
 .card .q.lat{font-size:56px}
+.card .q .jamo{opacity:.55;font-size:64px}
 .card .ask{color:var(--mute);font-size:14px;margin-top:10px}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .opts button{padding:18px 8px;border-radius:14px;border:1px solid var(--line);background:none;font:inherit;font-size:28px;font-weight:600;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.opts button .jamo{opacity:.55;font-size:22px}
 .opts button.ok{background:var(--blau);border-color:var(--blau);color:#fff}
 .opts button.no{background:var(--rothell);border-color:var(--rot);color:var(--rot)}
 .score{display:flex;justify-content:space-between;color:var(--mute);font-size:14px;margin-top:14px}
@@ -70,6 +76,51 @@ h2{font-size:17px;font-weight:700;margin:20px 0 8px}
 .chk{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}
 .chk label{font-size:14px;border:1px solid var(--line);border-radius:999px;padding:7px 12px;display:flex;gap:6px;align-items:center}
 .chk input{accent-color:var(--blau)}
+
+/* Zahlen */
+.ntab{width:100%;border-collapse:collapse;font-size:15px}
+.ntab th{text-align:left;font-weight:600;color:var(--mute);font-size:13px;padding:6px 4px;border-bottom:1px solid var(--line)}
+.ntab td{padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+.ntab td:first-child{font-weight:700;width:36px;color:var(--mute)}
+.ntab .w{display:block;background:none;border:0;padding:0;font:inherit;text-align:left;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ntab .w b{font-size:20px;font-weight:600;display:block;line-height:1.2}
+.ntab .w i{font-style:normal;color:var(--mute);font-size:13px}
+.ntab .w.sino b{color:var(--blau)}.ntab .w.nat b{color:var(--rot)}
+.info{padding:12px 14px;border-radius:12px;background:var(--blauhell);font-size:14px;line-height:1.5;margin-bottom:12px}
+.info+.info{background:var(--rothell)}
+
+/* Vokabeln */
+.vrow{display:grid;grid-template-columns:1fr auto;gap:0 10px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:9px 2px;font:inherit;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.vrow .ko{font-size:21px;font-weight:600;color:var(--blau)}
+.vrow .ro{color:var(--mute);font-size:13px;text-align:right;align-self:center}
+.vrow .de{grid-column:1/3;font-size:15px}
+.vrow .fm{grid-column:1/3}
+.card .vq{font-size:44px;min-height:auto;line-height:1.25;word-break:keep-all}
+.card .vq.lat{font-size:26px;font-weight:600}
+.opts.one{grid-template-columns:1fr}
+.opts button.vo{font-size:18px;padding:15px 10px}
+.cbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.cbtns .btn.no{background:var(--rothell);color:var(--rot)}
+.cbtns .btn.yes{background:var(--blau)}
+
+/* Höflichkeitsformen */
+.fm{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.fc{border:1px solid var(--line);border-radius:10px;padding:5px 9px;background:none;font:inherit;text-align:left;cursor:pointer;color:var(--ink);line-height:1.2;-webkit-tap-highlight-color:transparent}
+.fc em{display:block;font-style:normal;font-size:10px;color:var(--mute)}
+.fc b{font-size:16px;font-weight:600;display:block}
+.fc i{font-style:normal;font-size:11px;color:var(--mute)}
+.fc.L b{color:var(--mute)}.fc.H b{color:var(--blau)}.fc.F b{color:var(--ink)}.fc.E b{color:var(--rot)}
+.card .fm{justify-content:center;margin-top:14px}
+.legend{font-size:12px;color:var(--mute);line-height:1.5;margin:0 0 10px}
+
+/* Silbenzerlegung Vokabeln */
+.sb{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.sb button{border:1px solid var(--line);border-radius:8px;padding:3px 7px;background:var(--blauhell);font:inherit;color:var(--ink);cursor:pointer;line-height:1.15;text-align:center;-webkit-tap-highlight-color:transparent}
+.sb button b{display:block;font-size:18px;font-weight:600}
+.sb button i{font-style:normal;font-size:10px;color:var(--mute)}
+.sb .gap{width:8px}
+.vrow .sb{grid-column:1/3}
+.card .sb{justify-content:center;margin-top:12px}
 
 /* Übersetzen */
 textarea{width:100%;min-height:96px;padding:14px;border-radius:14px;border:1px solid var(--line);font:inherit;font-size:22px;resize:vertical;outline:none;background:var(--paper);color:var(--ink)}
@@ -97,7 +148,7 @@ textarea:focus{border-color:var(--blau)}
   <h2>Doppelkonsonanten (5)</h2><div class="grid" id="g-cc"></div>
   <h2>Grundvokale (10)</h2><div class="grid" id="g-v"></div>
   <h2>Zusammengesetzte Vokale (11)</h2><div class="grid" id="g-vv"></div>
-  <p class="note">Tippe ein Zeichen für Aussprache und Beispiel. Blau = Konsonant, Rot = Vokal.</p>
+  <p class="note">Tippe ein Zeichen für Aussprache und Beispiel. Blau = Konsonant, Rot = Vokal. Vokale werden doppelt gezeigt: links das reine Zeichen (ㅏ), rechts als Silbe mit stummem ㅇ (아), so wie es geschrieben und gesprochen wird.</p>
 </section>
 
 <!-- ÜBEN -->
@@ -121,6 +172,43 @@ textarea:focus{border-color:var(--blau)}
   <div class="score"><span>Richtig: <b id="sc-ok">0</b></span><span>Serie: <b id="sc-streak">0</b></span><span>Gesamt: <b id="sc-all">0</b></span></div>
 </section>
 
+<!-- ZAHLEN -->
+<section id="v-num" class="view">
+  <div class="info"><b style="color:var(--blau)">Sino-koreanisch</b> – für Datum, Geld, Telefonnummern, Minuten, Hausnummern.</div>
+  <div class="info"><b style="color:var(--rot)">Rein koreanisch</b> – zum Abzählen von Dingen und Personen, für das Alter und die Stunden. Wird nur bis 99 benutzt, ab 100 gilt das sino-koreanische 백.</div>
+  <p class="note" style="margin:0 0 10px">Wort antippen, um es zu hören.</p>
+  <table class="ntab"><thead><tr><th></th><th>Sino-koreanisch</th><th>Rein koreanisch</th></tr></thead><tbody id="numbody"></tbody></table>
+</section>
+
+<!-- VOKABELN -->
+<section id="v-voc" class="view">
+  <div class="seg" id="vmode">
+    <button data-m="list" class="on">Liste</button>
+    <button data-m="cards">Karten</button>
+    <button data-m="mc">Auswahl</button>
+  </div>
+  <div class="seg" id="vdir" style="display:none">
+    <button data-d="kd" class="on">Koreanisch → Deutsch</button>
+    <button data-d="dk">Deutsch → Koreanisch</button>
+  </div>
+  <div class="chk" id="vthemes"></div>
+  <p class="legend"><b>Locker</b> unter Freunden und zu Jüngeren · <b style="color:var(--blau)">Höflich</b> die sichere Standardform · <b>Formell</b> im Beruf und zu Fremden · <b style="color:var(--rot)">Ehrerbietig</b> über oder zu Älteren und Respektspersonen. Formen und einzelne Silben antippen zum Anhören. Die Silbenumschrift ist buchstabengetreu; im Wortfluss verschleifen sich Laute, z.&nbsp;B. 합니다 → „hamnida“.</p>
+  <div id="v-list"></div>
+  <div id="v-cards" style="display:none">
+    <div class="card" id="vc"></div>
+    <div class="spkrow" style="margin-top:10px"><button class="spk" id="vc-say">🔊 Anhören</button></div>
+    <div class="cbtns" id="vc-btns"><button class="btn no" id="vc-no">Nochmal</button><button class="btn yes" id="vc-yes">Gewusst</button></div>
+    <button class="btn ghost" id="vc-restart" style="display:none;margin-top:14px">Neu starten</button>
+    <div class="score"><span>Noch offen: <b id="vc-left">0</b></span></div>
+  </div>
+  <div id="v-mc" style="display:none">
+    <div class="card" id="vq"></div>
+    <div class="spkrow" style="margin-top:10px"><button class="spk" id="vq-say">🔊 Anhören</button></div>
+    <div class="opts one" id="vopts"></div>
+    <div class="score"><span>Richtig: <b id="vsc-ok">0</b></span><span>Gesamt: <b id="vsc-all">0</b></span></div>
+  </div>
+</section>
+
 <!-- ÜBERSETZEN -->
 <section id="v-tr" class="view">
   <div class="seg" id="trdir">
@@ -140,6 +228,8 @@ textarea:focus{border-color:var(--blau)}
 <nav>
   <button class="on" data-v="abc"><span class="k">가</span>Alphabet</button>
   <button data-v="quiz"><span class="k">?</span>Üben</button>
+  <button data-v="num"><span class="k">1</span>Zahlen</button>
+  <button data-v="voc"><span class="k">말</span>Vokabeln</button>
   <button data-v="tr"><span class="k">⇄</span>Übersetzen</button>
 </nav>
 
@@ -236,20 +326,24 @@ function say(text,rate){
   synth.speak(u);
 }
 
+// Vokal als Silbenblock mit stummem ㅇ darstellen (ㅏ → 아)
+const isVow=x=>JAMO_V.includes(x[0]);
+const block=x=>isVow(x)?String.fromCharCode(0xAC00+11*588+JAMO_V.indexOf(x[0])*28):x[0];
+
 // ---------- Alphabet-Ansicht ----------
 function fill(id,list,cls){
   const g=document.getElementById(id);
   list.forEach(x=>{
     const b=document.createElement('button');b.className='cell '+cls;
-    b.innerHTML=`<b>${x[0]}</b><span>${x[1]}</span>`;
+    b.innerHTML=isVow(x)?`<b class="two"><span class="jamo">${x[0]}</span>${block(x)}</b><span>${x[1]}</span>`:`<b>${x[0]}</b><span>${x[1]}</span>`;
     b.onclick=()=>show(x);g.appendChild(b);
   });
 }
 fill('g-c',C,'c');fill('g-cc',CC,'c');fill('g-v',V,'v');fill('g-vv',VV,'v');
 const det=document.getElementById('detail');
 function show(x){
-  document.getElementById('d-big').textContent=x[0];
-  document.getElementById('d-rom').textContent=x[1];
+  document.getElementById('d-big').innerHTML=isVow(x)?`<span class="jamo">${x[0]}</span> ${block(x)}`:x[0];
+  document.getElementById('d-rom').innerHTML=x[1]+(isVow(x)?` <span class="jm">links das reine Zeichen, rechts als Silbe mit stummem ㅇ</span>`:'');
   document.getElementById('d-hint').textContent=x[2];
   document.getElementById('d-ex').innerHTML=`<b>${x[3]}</b><br>${x[4]}`;
   document.getElementById('d-say').onclick=()=>say(speakable(x[0]),0.7);
@@ -260,7 +354,7 @@ document.getElementById('d-close').onclick=()=>det.classList.remove('on');
 det.onclick=e=>{if(e.target===det)det.classList.remove('on')};
 
 // ---------- Navigation ----------
-const subs={abc:'Das koreanische Alphabet – Zeichen, Laute und Umschrift.',quiz:'Zeichen und Laute zuordnen.',tr:'Wörter in beide Richtungen umschreiben.'};
+const subs={voc:'Alltagswörter lernen – Liste, Karten oder Auswahl.',num:'Zwei Zahlensysteme – wann welches gilt.',abc:'Das koreanische Alphabet – Zeichen, Laute und Umschrift.',quiz:'Zeichen und Laute zuordnen.',tr:'Wörter in beide Richtungen umschreiben.'};
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));
   document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v));
@@ -291,12 +385,12 @@ function next(){
   const others=new Set([c]);while(others.size<4)others.add(rnd(p));
   const opts=[...others].sort(()=>Math.random()-.5);
   const q=document.getElementById('q');
-  q.textContent=dir==='kd'?c[0]:c[1];q.classList.toggle('lat',dir!=='kd');
+  q.innerHTML=dir==='kd'?(isVow(c)?`<span class="jamo">${c[0]}</span> ${block(c)}`:c[0]):c[1];q.classList.toggle('lat',dir!=='kd');
   document.getElementById('q-say').style.display=dir==='kd'?'':'none';
   document.getElementById('ask').textContent=dir==='kd'?'Wie wird das umschrieben?':'Welches Zeichen ist das?';
   const o=document.getElementById('opts');o.innerHTML='';
   opts.forEach(x=>{
-    const b=document.createElement('button');b.textContent=dir==='kd'?x[1]:x[0];
+    const b=document.createElement('button');b.dataset.k=dir==='kd'?x[1]:x[0];b.innerHTML=dir==='kd'?x[1]:(isVow(x)?`<span class="jamo">${x[0]}</span> ${block(x)}`:x[0]);
     b.onclick=()=>answer(b,x===c);o.appendChild(b);
   });
 }
@@ -305,10 +399,194 @@ function answer(b,right){
   if(locked)return;locked=true;all++;
   if(right){ok++;streak++;b.classList.add('ok')}
   else{streak=0;b.classList.add('no');
-    [...document.getElementById('opts').children].forEach(x=>{if(x.textContent===(dir==='kd'?cur[1]:cur[0]))x.classList.add('ok')});}
+    [...document.getElementById('opts').children].forEach(x=>{if(x.dataset.k===(dir==='kd'?cur[1]:cur[0]))x.classList.add('ok')});}
   document.getElementById('sc-ok').textContent=ok;document.getElementById('sc-all').textContent=all;document.getElementById('sc-streak').textContent=streak;
   setTimeout(next,right?600:1400);
 }
+
+// ---------- Zahlen ----------
+const SD=[['',''],['일','il'],['이','i'],['삼','sam'],['사','sa'],['오','o'],['육','yuk'],['칠','chil'],['팔','pal'],['구','gu']];
+const ND=[['',''],['하나','hana'],['둘','dul'],['셋','set'],['넷','net'],['다섯','daseot'],['여섯','yeoseot'],['일곱','ilgop'],['여덟','yeodeol'],['아홉','ahop']];
+const NT=[['',''],['열','yeol'],['스물','seumul'],['서른','seoreun'],['마흔','maheun'],['쉰','swin'],['예순','yesun'],['일흔','ilheun'],['여든','yeodeun'],['아흔','aheun']];
+function sino(n){
+  if(n===100)return['백','baek'];
+  const t=Math.floor(n/10),u=n%10;let k='',r='';
+  if(t>1){k+=SD[t][0];r+=SD[t][1]}
+  if(t>0){k+='십';r+='sip'}
+  if(u>0){k+=SD[u][0];r+=SD[u][1]}
+  if(n===16)r='simnyuk'; // Aussprache von 십육
+  return[k,r];
+}
+function nat(n){
+  if(n===100)return['(백)','baek'];
+  const t=Math.floor(n/10),u=n%10;
+  return[NT[t][0]+ND[u][0],NT[t][1]+ND[u][1]];
+}
+(function(){
+  const tb=document.getElementById('numbody');
+  for(let n=1;n<=100;n++){
+    const a=sino(n),b=nat(n);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${n}</td><td><button class="w sino"><b>${a[0]}</b><i>${a[1]}</i></button></td><td><button class="w nat"><b>${b[0]}</b><i>${b[1]}</i></button></td>`;
+    tr.children[1].firstChild.onclick=()=>say(a[0]);
+    tr.children[2].firstChild.onclick=()=>say(n===100?'백':b[0]);
+    tb.appendChild(tr);
+  }
+})();
+
+// ---------- Höflichkeitsformen ----------
+// L = locker (반말, Freunde/Jüngere), H = höflich (해요체, Standard), F = formell (합니다체, Beruf/Fremde), E = ehrerbietig (존댓말, über/zu Älteren)
+const FORMS={
+'안녕하세요':[['L','안녕','annyeong'],['H','안녕하세요','annyeonghaseyo'],['F','안녕하십니까','annyeonghasimnikka']],
+'감사합니다':[['L','고마워','gomawo'],['H','고마워요','gomawoyo'],['F','감사합니다','gamsahamnida']],
+'죄송합니다':[['L','미안해','mianhae'],['H','미안해요','mianhaeyo'],['F','죄송합니다','joesonghamnida']],
+'네':[['L','응','eung'],['H','네','ne'],['F','예','ye']],
+'아니요':[['L','아니','ani'],['H','아니요','aniyo'],['F','아닙니다','animnida']],
+'안녕히 가세요':[['L','잘 가','jal ga'],['H','안녕히 가세요','annyeonghi gaseyo'],['F','안녕히 가십시오','annyeonghi gasipsio']],
+'안녕히 계세요':[['L','잘 있어','jal isseo'],['H','안녕히 계세요','annyeonghi gyeseyo'],['F','안녕히 계십시오','annyeonghi gyesipsio']],
+'괜찮아요':[['L','괜찮아','gwaenchana'],['H','괜찮아요','gwaenchanayo'],['F','괜찮습니다','gwaenchanseumnida']],
+'잘 먹겠습니다':[['L','잘 먹을게','jal meogeulge'],['H','잘 먹을게요','jal meogeulgeyo'],['F','잘 먹겠습니다','jal meokgetseumnida']],
+'처음 뵙겠습니다':[['L','만나서 반가워','mannaseo bangawo'],['H','만나서 반가워요','mannaseo bangawoyo'],['F','처음 뵙겠습니다','cheoeum boepgetseumnida']],
+'사랑해요':[['L','사랑해','saranghae'],['H','사랑해요','saranghaeyo'],['F','사랑합니다','saranghamnida']],
+'맛있어요':[['L','맛있어','masisseo'],['H','맛있어요','masisseoyo'],['F','맛있습니다','masitseumnida']],
+'이름':[['H','이름','ireum'],['E','성함','seongham']],
+'집':[['H','집','jip'],['E','댁','daek']],
+'사람':[['H','사람','saram'],['E','분','bun']],
+'밥':[['H','밥','bap'],['E','진지','jinji']],
+'어머니':[['L','엄마','eomma'],['H','어머니','eomeoni'],['E','어머님','eomeonim']],
+'아버지':[['L','아빠','appa'],['H','아버지','abeoji'],['E','아버님','abeonim']],
+'저':[['L','나','na'],['H','저','jeo']],
+'우리':[['L','우리','uri'],['H','저희','jeohui']],
+'뭐':[['L','뭐','mwo'],['F','무엇','mueot']],
+'얼마예요?':[['L','얼마야?','eolmaya'],['H','얼마예요?','eolmayeyo'],['F','얼마입니까?','eolmaimnikka']],
+'어디예요?':[['L','어디야?','eodiya'],['H','어디예요?','eodiyeyo'],['F','어디입니까?','eodiimnikka']],
+'가다':[['L','가','ga'],['H','가요','gayo'],['F','갑니다','gamnida'],['E','가세요','gaseyo']],
+'오다':[['L','와','wa'],['H','와요','wayo'],['F','옵니다','omnida'],['E','오세요','oseyo']],
+'먹다':[['L','먹어','meogeo'],['H','먹어요','meogeoyo'],['F','먹습니다','meokseumnida'],['E','드세요','deuseyo']],
+'마시다':[['L','마셔','masyeo'],['H','마셔요','masyeoyo'],['F','마십니다','masimnida'],['E','드세요','deuseyo']],
+'보다':[['L','봐','bwa'],['H','봐요','bwayo'],['F','봅니다','bomnida'],['E','보세요','boseyo']],
+'하다':[['L','해','hae'],['H','해요','haeyo'],['F','합니다','hamnida'],['E','하세요','haseyo']],
+'사다':[['L','사','sa'],['H','사요','sayo'],['F','삽니다','samnida']],
+'자다':[['L','자','ja'],['H','자요','jayo'],['F','잡니다','jamnida'],['E','주무세요','jumuseyo']],
+'좋아하다':[['L','좋아해','joahae'],['H','좋아해요','joahaeyo'],['F','좋아합니다','joahamnida']],
+'공부하다':[['L','공부해','gongbuhae'],['H','공부해요','gongbuhaeyo'],['F','공부합니다','gongbuhamnida']],
+'크다':[['L','커','keo'],['H','커요','keoyo'],['F','큽니다','keumnida']],
+'작다':[['L','작아','jaga'],['H','작아요','jagayo'],['F','작습니다','jakseumnida']],
+'좋다':[['L','좋아','joa'],['H','좋아요','joayo'],['F','좋습니다','joseumnida']],
+'예쁘다':[['L','예뻐','yeppeo'],['H','예뻐요','yeppeoyo'],['F','예쁩니다','yeppeumnida']],
+'춥다':[['L','추워','chuwo'],['H','추워요','chuwoyo'],['F','춥습니다','chupseumnida']],
+'덥다':[['L','더워','deowo'],['H','더워요','deowoyo'],['F','덥습니다','deopseumnida']],
+'비싸다':[['L','비싸','bissa'],['H','비싸요','bissayo'],['F','비쌉니다','bissamnida']],
+'싸다':[['L','싸','ssa'],['H','싸요','ssayo'],['F','쌉니다','ssamnida']]
+};
+const LVL={L:'locker',H:'höflich',F:'formell',E:'ehrerbietig'};
+function formsHtml(ko){
+  const f=FORMS[ko];if(!f)return'';
+  return '<div class="fm">'+f.map(x=>`<button class="fc ${x[0]}" data-ko="${x[1]}"><em>${LVL[x[0]]}</em><b>${x[1]}</b><i>${x[2]}</i></button>`).join('')+'</div>';
+}
+document.addEventListener('click',e=>{const b=e.target.closest('.fc');if(b){e.stopPropagation();say(b.dataset.ko)}},true);
+
+// Wort in Silbenblöcke zerlegen (jede Silbe anhörbar)
+function sylHtml(w){
+  let h='<div class="sb">';
+  for(const ch of w){
+    if(ch===' '){h+='<span class="gap"></span>';continue}
+    const c=ch.codePointAt(0);
+    if(c>=0xAC00&&c<=0xD7A3)h+=`<button class="sy" data-ko="${ch}"><b>${ch}</b><i>${korToLat(ch).text}</i></button>`;
+  }
+  return h+'</div>';
+}
+document.addEventListener('click',e=>{const b=e.target.closest('.sy');if(b){e.stopPropagation();say(b.dataset.ko,0.7)}},true);
+
+// ---------- Vokabeln ----------
+const VOC={
+'Begrüßung':[['안녕하세요','annyeonghaseyo','Hallo / Guten Tag'],['감사합니다','gamsahamnida','Danke'],['죄송합니다','joesonghamnida','Entschuldigung'],['네','ne','Ja'],['아니요','aniyo','Nein'],['안녕히 가세요','annyeonghi gaseyo','Auf Wiedersehen (zum Gehenden)'],['안녕히 계세요','annyeonghi gyeseyo','Auf Wiedersehen (zum Bleibenden)'],['괜찮아요','gwaenchanayo','In Ordnung / Kein Problem'],['잘 먹겠습니다','jal meokgetseumnida','Guten Appetit (vor dem Essen)'],['처음 뵙겠습니다','cheoeum boepgetseumnida','Freut mich, Sie kennenzulernen'],['이름','ireum','Name'],['사랑해요','saranghaeyo','Ich liebe dich']],
+'Familie & Personen':[['엄마','eomma','Mama'],['아빠','appa','Papa'],['어머니','eomeoni','Mutter'],['아버지','abeoji','Vater'],['친구','chingu','Freund / Freundin'],['가족','gajok','Familie'],['남자','namja','Mann'],['여자','yeoja','Frau'],['아이','ai','Kind'],['사람','saram','Mensch / Person'],['언니','eonni','ältere Schwester (sagt eine Frau)'],['오빠','oppa','älterer Bruder (sagt eine Frau)'],['형','hyeong','älterer Bruder (sagt ein Mann)'],['누나','nuna','ältere Schwester (sagt ein Mann)'],['동생','dongsaeng','jüngeres Geschwister']],
+'Essen & Trinken':[['물','mul','Wasser'],['밥','bap','Reis / Mahlzeit'],['김치','gimchi','Kimchi'],['고기','gogi','Fleisch'],['빵','ppang','Brot'],['커피','keopi','Kaffee'],['차','cha','Tee'],['맥주','maekju','Bier'],['우유','uyu','Milch'],['과일','gwail','Obst'],['사과','sagwa','Apfel'],['계란','gyeran','Ei'],['식당','sikdang','Restaurant'],['맛있어요','masisseoyo','Es schmeckt gut']],
+'Alltag & Orte':[['집','jip','Haus / Zuhause'],['학교','hakgyo','Schule'],['회사','hoesa','Firma'],['병원','byeongwon','Krankenhaus'],['가게','gage','Laden'],['화장실','hwajangsil','Toilette'],['역','yeok','Bahnhof'],['공항','gonghang','Flughafen'],['돈','don','Geld'],['책','chaek','Buch'],['전화','jeonhwa','Telefon'],['자동차','jadongcha','Auto'],['옷','ot','Kleidung'],['나라','nara','Land'],['한국','hanguk','Korea'],['독일','dogil','Deutschland']],
+'Zeit':[['오늘','oneul','heute'],['내일','naeil','morgen'],['어제','eoje','gestern'],['지금','jigeum','jetzt'],['아침','achim','Morgen (Tageszeit)'],['저녁','jeonyeok','Abend'],['시간','sigan','Zeit / Stunde'],['주말','jumal','Wochenende'],['년','nyeon','Jahr'],['월','wol','Monat'],['요일','yoil','Wochentag']],
+'Verben & Adjektive':[['가다','gada','gehen'],['오다','oda','kommen'],['먹다','meokda','essen'],['마시다','masida','trinken'],['보다','boda','sehen'],['하다','hada','tun / machen'],['사다','sada','kaufen'],['자다','jada','schlafen'],['좋아하다','joahada','mögen'],['공부하다','gongbuhada','lernen'],['크다','keuda','groß'],['작다','jakda','klein'],['좋다','jota','gut'],['예쁘다','yeppeuda','hübsch'],['춥다','chupda','kalt'],['덥다','deopda','heiß'],['비싸다','bissada','teuer'],['싸다','ssada','billig']],
+'Fragen & Pronomen':[['저','jeo','ich (höflich)'],['우리','uri','wir'],['뭐','mwo','was'],['어디','eodi','wo'],['언제','eonje','wann'],['누구','nugu','wer'],['왜','wae','warum'],['얼마예요?','eolmayeyo','Wie viel kostet das?'],['어디예요?','eodiyeyo','Wo ist ...?']]
+};
+const THEMES=Object.keys(VOC);
+let vmode='list',vdir='kd',vcur=null,vlock=false,vok=0,vall=0,vqueue=[],flipped=false;
+const vthemes=document.getElementById('vthemes');
+THEMES.forEach((t,i)=>{
+  const l=document.createElement('label');
+  l.innerHTML=`<input type="checkbox" ${i<3?'checked':''}> ${t}`;
+  l.firstChild.onchange=vrestart;vthemes.appendChild(l);
+});
+function vpool(){
+  let p=[];[...vthemes.querySelectorAll('input')].forEach((c,i)=>{if(c.checked)p=p.concat(VOC[THEMES[i]])});
+  if(p.length<4)p=VOC[THEMES[0]].concat(VOC[THEMES[2]]);
+  return p;
+}
+document.querySelectorAll('#vmode button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#vmode button').forEach(x=>x.classList.toggle('on',x===b));vmode=b.dataset.m;vrestart();
+});
+document.querySelectorAll('#vdir button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#vdir button').forEach(x=>x.classList.toggle('on',x===b));vdir=b.dataset.d;vrestart();
+});
+function vrestart(){
+  document.getElementById('v-list').style.display=vmode==='list'?'':'none';
+  document.getElementById('v-cards').style.display=vmode==='cards'?'':'none';
+  document.getElementById('v-mc').style.display=vmode==='mc'?'':'none';
+  document.getElementById('vdir').style.display=vmode==='list'?'none':'';
+  if(vmode==='list')vlist();else if(vmode==='cards'){vqueue=vpool().slice().sort(()=>Math.random()-.5);vcard()}else vmc();
+}
+function vlist(){
+  const el=document.getElementById('v-list');el.innerHTML='';
+  THEMES.forEach((t,i)=>{
+    if(!vthemes.querySelectorAll('input')[i].checked)return;
+    const h=document.createElement('h2');h.textContent=t;el.appendChild(h);
+    VOC[t].forEach(w=>{
+      const r=document.createElement('div');r.className='vrow';
+      r.innerHTML=`<span class="ko">${w[0]}</span><span class="ro">${w[1]}</span><span class="de">${w[2]}</span>`+sylHtml(w[0])+formsHtml(w[0]);
+      r.onclick=e=>{if(!e.target.closest('.fc,.sy'))say(w[0])};el.appendChild(r);
+    });
+  });
+}
+function vcard(){
+  const c=document.getElementById('vc');
+  if(!vqueue.length){c.innerHTML='<div class="q lat" style="font-size:24px">Alle Karten gewusst.</div><div class="ask">Themen ändern oder neu starten.</div>';
+    document.getElementById('vc-btns').style.display='none';document.getElementById('vc-restart').style.display='';return}
+  document.getElementById('vc-btns').style.display='';document.getElementById('vc-restart').style.display='none';
+  vcur=vqueue[0];flipped=false;vcardDraw();
+  document.getElementById('vc-left').textContent=vqueue.length;
+}
+function vcardDraw(){
+  const front=vdir==='kd',showKo=front?!flipped:flipped;
+  document.getElementById('vc').innerHTML=(showKo
+    ?`<div class="q vq">${vcur[0]}</div><div class="ask">${flipped?vcur[1]:'Antippen zum Umdrehen'}</div>`
+    :`<div class="q vq lat">${vcur[2]}</div><div class="ask">${flipped?vcur[1]:'Antippen zum Umdrehen'}</div>`)+(flipped?sylHtml(vcur[0])+formsHtml(vcur[0]):'');
+}
+document.getElementById('vc').onclick=e=>{if(!vcur||e.target.closest('.sy,.fc'))return;flipped=!flipped;vcardDraw();if(flipped&&vdir!=='kd')say(vcur[0])};
+document.getElementById('vc-say').onclick=e=>{e.stopPropagation();if(vcur)say(vcur[0])};
+document.getElementById('vc-no').onclick=()=>{vqueue.push(vqueue.shift());vcard()};
+document.getElementById('vc-yes').onclick=()=>{vqueue.shift();vcard()};
+document.getElementById('vc-restart').onclick=vrestart;
+function vmc(){
+  vlock=false;const p=vpool();
+  let c;do{c=rnd(p)}while(c===vcur&&p.length>1);vcur=c;
+  const set=new Set([c]);while(set.size<4)set.add(rnd(p));
+  const opts=[...set].sort(()=>Math.random()-.5);
+  document.getElementById('vq').innerHTML=vdir==='kd'?`<div class="q vq">${c[0]}</div><div class="ask">${c[1]}</div>`+sylHtml(c[0]):`<div class="q vq lat">${c[2]}</div><div class="ask">Welches Wort ist das?</div><div id="vq-syl"></div>`;
+  const o=document.getElementById('vopts');o.innerHTML='';
+  opts.forEach(x=>{
+    const b=document.createElement('button');b.className='vo';b.textContent=vdir==='kd'?x[2]:x[0];
+    b.onclick=()=>{
+      if(vlock)return;vlock=true;vall++;
+      if(x===c){vok++;b.classList.add('ok')}
+      else{b.classList.add('no');[...o.children].forEach(y=>{if(y.textContent===(vdir==='kd'?c[2]:c[0]))y.classList.add('ok')})}
+      document.getElementById('vsc-ok').textContent=vok;document.getElementById('vsc-all').textContent=vall;
+      if(vdir!=='kd'){say(c[0]);document.getElementById('vq-syl').innerHTML=`<div class="ask" style="margin-top:12px">${c[0]} · ${c[1]}</div>`+sylHtml(c[0])}
+      setTimeout(vmc,x===c?1200:2200);
+    };
+    o.appendChild(b);
+  });
+}
+document.getElementById('vq-say').onclick=()=>{if(vcur)say(vcur[0])};
+vrestart();
 
 // ---------- Umschrift ----------
 const LEAD=['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'];

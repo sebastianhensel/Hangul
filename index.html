@@ -14,18 +14,25 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{font-family:-apple-system,"Apple SD Gothic Neo","Helvetica Neue",Arial,"Noto Sans KR",sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
-header{padding:calc(20px + env(safe-area-inset-top)) 20px 12px;border-bottom:1px solid var(--line)}
-header h1{font-size:34px;font-weight:700;letter-spacing:-.5px;line-height:1}
-header p{color:var(--mute);font-size:14px;margin-top:6px}
+body{padding-bottom:24px;font-family:-apple-system,"Apple SD Gothic Neo","Helvetica Neue",Arial,"Noto Sans KR",sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}
+header{position:sticky;top:0;z-index:5;background:var(--paper);padding:calc(10px + env(safe-area-inset-top)) 16px 8px;border-bottom:1px solid var(--line)}
+#menubtn{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:4px 0;font:inherit;text-align:left;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+#menubtn .k{font-size:22px;font-weight:700;color:var(--blau);width:30px;text-align:center}
+#menubtn h1{font-size:22px;font-weight:700;letter-spacing:-.3px;line-height:1.1;flex:1}
+#menubtn p{color:var(--mute);font-size:12px;margin-top:2px;font-weight:400}
+#menubtn .chev{color:var(--mute);font-size:14px;transition:transform .15s}
+#menubtn.open .chev{transform:rotate(180deg)}
+#menu{display:none;position:absolute;left:12px;right:12px;top:100%;margin-top:6px;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgba(20,26,46,.14);overflow:hidden}
+#menu.open{display:block}
+#menu button{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border:0;border-bottom:1px solid var(--line);background:none;font:inherit;font-size:16px;color:var(--ink);text-align:left;cursor:pointer}
+#menu button:last-child{border-bottom:0}
+#menu button .k{font-size:20px;font-weight:700;width:30px;text-align:center;color:var(--ink)}
+#menu button.on{background:var(--blauhell)}#menu button.on .k{color:var(--blau)}
+#menu button small{display:block;color:var(--mute);font-size:12px;margin-top:1px}
+#menu button span{flex:1}
 main{padding:16px 16px 24px;max-width:560px;margin:0 auto}
 .view{display:none}.view.on{display:block}
 
-/* Navigation */
-nav{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
-nav button{flex:1;padding:12px 2px 10px;border:0;background:none;font:inherit;font-size:11px;color:var(--mute);cursor:pointer}
-nav button .k{display:block;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:2px}
-nav button.on{color:var(--blau)}nav button.on .k{color:var(--blau)}
 
 /* Alphabet */
 h2{font-size:17px;font-weight:700;margin:20px 0 8px}
@@ -69,6 +76,8 @@ h2{font-size:17px;font-weight:700;margin:20px 0 8px}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .opts button{padding:18px 8px;border-radius:14px;border:1px solid var(--line);background:none;font:inherit;font-size:28px;font-weight:600;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .opts button .jamo{opacity:.55;font-size:22px}
+.opts button small{display:block;font-size:12px;font-weight:400;color:var(--mute)}
+.opts button.ok small,.opts button.no small{color:inherit;opacity:.8}
 .opts button.ok{background:var(--blau);border-color:var(--blau);color:#fff}
 .opts button.no{background:var(--rothell);border-color:var(--rot);color:var(--rot)}
 .score{display:flex;justify-content:space-between;color:var(--mute);font-size:14px;margin-top:14px}
@@ -99,6 +108,8 @@ h2{font-size:17px;font-weight:700;margin:20px 0 8px}
 .card .vq.lat{font-size:26px;font-weight:600}
 .opts.one{grid-template-columns:1fr}
 .opts button.vo{font-size:18px;padding:15px 10px}
+.opts button.vo small{display:block;font-size:12px;font-weight:400;color:var(--mute)}
+.opts button.ok small,.opts button.no small{color:inherit;opacity:.8}
 .cbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .cbtns .btn.no{background:var(--rothell);color:var(--rot)}
 .cbtns .btn.yes{background:var(--blau)}
@@ -136,8 +147,14 @@ textarea:focus{border-color:var(--blau)}
 <body>
 
 <header>
-  <h1 id="title">Hangul lernen</h1>
-  <p id="sub">Das koreanische Alphabet – Zeichen, Laute und Umschrift.</p>
+  <button id="menubtn"><span class="k" id="cur-k">가</span><span><h1 id="title">Alphabet</h1><p id="sub">Zeichen, Laute und Umschrift</p></span><span class="chev">▼</span></button>
+  <div id="menu">
+    <button data-v="abc" class="on"><span class="k">가</span><span>Alphabet<small>Zeichen, Laute und Umschrift</small></span></button>
+    <button data-v="quiz"><span class="k">?</span><span>Üben<small>Zeichen und Zahlen abfragen</small></span></button>
+    <button data-v="num"><span class="k">1</span><span>Zahlen<small>Beide Zahlensysteme nachschlagen</small></span></button>
+    <button data-v="voc"><span class="k">말</span><span>Vokabeln<small>Liste, Karten, Auswahl</small></span></button>
+    <button data-v="tr"><span class="k">⇄</span><span>Übersetzen<small>Umschrift in beide Richtungen</small></span></button>
+  </div>
 </header>
 
 <main>
@@ -162,6 +179,12 @@ textarea:focus{border-color:var(--blau)}
     <label><input type="checkbox" id="s-cc"> Doppelkonsonanten</label>
     <label><input type="checkbox" id="s-v" checked> Vokale</label>
     <label><input type="checkbox" id="s-vv"> Zusammengesetzte Vokale</label>
+    <label><input type="checkbox" id="s-num"> Zahlen</label>
+  </div>
+  <div id="numopts" style="display:none">
+    <div class="seg" id="nsys"><button data-s="sino" class="on">Sino</button><button data-s="nat">Rein koreanisch</button><button data-s="both">Beide</button></div>
+    <div class="seg" id="nrange"><button data-r="10" class="on">1–10</button><button data-r="30">1–30</button><button data-r="100">1–100</button></div>
+    <div class="chk"><label><input type="checkbox" id="s-listen"> Zahlen auch nur per Hören abfragen</label></div>
   </div>
   <div class="card">
     <div class="q" id="q"></div>
@@ -176,8 +199,10 @@ textarea:focus{border-color:var(--blau)}
 <section id="v-num" class="view">
   <div class="info"><b style="color:var(--blau)">Sino-koreanisch</b> – für Datum, Geld, Telefonnummern, Minuten, Hausnummern.</div>
   <div class="info"><b style="color:var(--rot)">Rein koreanisch</b> – zum Abzählen von Dingen und Personen, für das Alter und die Stunden. Wird nur bis 99 benutzt, ab 100 gilt das sino-koreanische 백.</div>
-  <p class="note" style="margin:0 0 10px">Wort antippen, um es zu hören.</p>
-  <table class="ntab"><thead><tr><th></th><th>Sino-koreanisch</th><th>Rein koreanisch</th></tr></thead><tbody id="numbody"></tbody></table>
+  <div id="n-table">
+    <p class="note" style="margin:0 0 10px">Wort antippen, um es zu hören.</p>
+    <table class="ntab"><thead><tr><th></th><th>Sino-koreanisch</th><th>Rein koreanisch</th></tr></thead><tbody id="numbody"></tbody></table>
+  </div>
 </section>
 
 <!-- VOKABELN -->
@@ -225,13 +250,6 @@ textarea:focus{border-color:var(--blau)}
 
 </main>
 
-<nav>
-  <button class="on" data-v="abc"><span class="k">가</span>Alphabet</button>
-  <button data-v="quiz"><span class="k">?</span>Üben</button>
-  <button data-v="num"><span class="k">1</span>Zahlen</button>
-  <button data-v="voc"><span class="k">말</span>Vokabeln</button>
-  <button data-v="tr"><span class="k">⇄</span>Übersetzen</button>
-</nav>
 
 <div class="detail" id="detail">
   <div class="sheet">
@@ -300,6 +318,9 @@ const VV=[
 ];
 
 const JAMO_C='ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ',JAMO_V='ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ';
+const LEAD=['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'];
+const VOW=['a','ae','ya','yae','eo','e','yeo','ye','o','wa','wae','oe','yo','u','wo','we','wi','yu','eu','ui','i'];
+const TAIL=['','k','k','k','n','n','n','t','l','k','m','l','l','l','p','l','m','p','p','t','t','ng','t','t','k','t','p','t'];
 // ---------- Sprachausgabe ----------
 const synth=window.speechSynthesis;let koVoice=null;
 function pickVoice(){
@@ -354,11 +375,16 @@ document.getElementById('d-close').onclick=()=>det.classList.remove('on');
 det.onclick=e=>{if(e.target===det)det.classList.remove('on')};
 
 // ---------- Navigation ----------
-const subs={voc:'Alltagswörter lernen – Liste, Karten oder Auswahl.',num:'Zwei Zahlensysteme – wann welches gilt.',abc:'Das koreanische Alphabet – Zeichen, Laute und Umschrift.',quiz:'Zeichen und Laute zuordnen.',tr:'Wörter in beide Richtungen umschreiben.'};
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));
+const menu=document.getElementById('menu'),menubtn=document.getElementById('menubtn');
+menubtn.onclick=e=>{e.stopPropagation();menu.classList.toggle('open');menubtn.classList.toggle('open')};
+document.addEventListener('click',e=>{if(!e.target.closest('#menu')){menu.classList.remove('open');menubtn.classList.remove('open')}});
+document.querySelectorAll('#menu button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#menu button').forEach(x=>x.classList.toggle('on',x===b));
   document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v));
-  document.getElementById('sub').textContent=subs[b.dataset.v];
+  document.getElementById('title').textContent=b.children[1].firstChild.textContent;
+  document.getElementById('sub').textContent=b.querySelector('small').textContent;
+  document.getElementById('cur-k').textContent=b.querySelector('.k').textContent;
+  menu.classList.remove('open');menubtn.classList.remove('open');
   if(b.dataset.v==='quiz')next();
   window.scrollTo(0,0);
 });
@@ -368,19 +394,23 @@ let dir='kd',cur=null,locked=false,ok=0,all=0,streak=0;
 document.querySelectorAll('#dir button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#dir button').forEach(x=>x.classList.toggle('on',x===b));dir=b.dataset.d;next();
 });
-['s-c','s-cc','s-v','s-vv'].forEach(id=>document.getElementById(id).onchange=next);
+['s-c','s-cc','s-v','s-vv','s-num','s-listen'].forEach(id=>document.getElementById(id).onchange=next);
 function pool(){
   let p=[];
   if(document.getElementById('s-c').checked)p=p.concat(C);
   if(document.getElementById('s-cc').checked)p=p.concat(CC);
   if(document.getElementById('s-v').checked)p=p.concat(V);
   if(document.getElementById('s-vv').checked)p=p.concat(VV);
-  if(p.length<4)p=C.concat(V);
+  if(p.length&&p.length<4)p=C.concat(V);
   return p;
 }
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 function next(){
-  locked=false;const p=pool();
+  locked=false;const p=pool();const wantNum=document.getElementById('s-num').checked;
+  document.getElementById('numopts').style.display=wantNum?'':'none';
+  if(wantNum&&(!p.length||Math.random()<.5)){nq();return}
+  if(!p.length){document.getElementById('s-c').checked=true;return next()}
+  document.getElementById('q').classList.remove('lat');
   let c;do{c=rnd(p)}while(c===cur&&p.length>1);cur=c;
   const others=new Set([c]);while(others.size<4)others.add(rnd(p));
   const opts=[...others].sort(()=>Math.random()-.5);
@@ -394,7 +424,7 @@ function next(){
     b.onclick=()=>answer(b,x===c);o.appendChild(b);
   });
 }
-document.getElementById('q-say').onclick=()=>{if(cur)say(speakable(cur[0]),0.7)};
+document.getElementById('q-say').onclick=()=>{if(cur)say(speakable(cur[0]),0.7);else if(ncur)say(nword(ncur.n,ncur.sys)[0])};
 function answer(b,right){
   if(locked)return;locked=true;all++;
   if(right){ok++;streak++;b.classList.add('ok')}
@@ -588,10 +618,45 @@ function vmc(){
 document.getElementById('vq-say').onclick=()=>{if(vcur)say(vcur[0])};
 vrestart();
 
+// ---------- Zahlen üben (im Üben-Tab) ----------
+let nsys='sino',nrange=10,ncur=null;
+function segInit(id,cb){document.querySelectorAll('#'+id+' button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.toggle('on',x===b));cb(b.dataset);})}
+segInit('nsys',d=>{nsys=d.s;next()});
+segInit('nrange',d=>{nrange=+d.r;next()});
+function nword(n,sys){return sys==='sino'?sino(n):nat(n)}
+function nq(){
+  cur=null;
+  const sys=nsys==='both'?(Math.random()<.5?'sino':'nat'):nsys;
+  const max=sys==='nat'&&nrange===100?99:nrange;
+  let n;do{n=1+Math.floor(Math.random()*max)}while(ncur&&n===ncur.n&&max>1);
+  const listen=document.getElementById('s-listen').checked&&Math.random()<.5;
+  ncur={n,sys,listen};
+  const w=nword(n,sys),label=sys==='sino'?'Sino-koreanisch':'Rein koreanisch';
+  const q=document.getElementById('q'),ask=document.getElementById('ask');
+  const numToWord=dir!=='kd'; // Deutsch→Koreanisch: Zahl → Wort
+  if(listen){q.textContent='🔊';q.classList.add('lat');ask.textContent=label+' – welche Zahl hörst du?';setTimeout(()=>say(w[0]),150)}
+  else if(numToWord){q.textContent=n;q.classList.add('lat');ask.textContent=label+' – welches Wort?'}
+  else{q.textContent=w[0];q.classList.remove('lat');ask.textContent=w[1]+' · '+label}
+  document.getElementById('q-say').style.display=(listen||!numToWord)?'':'none';
+  const set=new Set([n]);let guard=0;
+  while(set.size<4&&guard++<200){const d=Math.floor(Math.random()*Math.min(10,max))-5;let m=n+d;if(m<1||m>max)m=1+Math.floor(Math.random()*max);set.add(m)}
+  const opts=[...set].sort(()=>Math.random()-.5);
+  const o=document.getElementById('opts');o.innerHTML='';
+  opts.forEach(m=>{
+    const b=document.createElement('button');const mw=nword(m,sys);
+    b.innerHTML=(numToWord&&!listen)?`${mw[0]}<small>${mw[1]}</small>`:String(m);b.dataset.n=m;
+    b.onclick=()=>{
+      if(locked)return;locked=true;all++;
+      if(m===n){ok++;streak++;b.classList.add('ok')}else{streak=0;b.classList.add('no');[...o.children].forEach(y=>{if(+y.dataset.n===n)y.classList.add('ok')})}
+      say(w[0]);
+      document.getElementById('sc-ok').textContent=ok;document.getElementById('sc-all').textContent=all;document.getElementById('sc-streak').textContent=streak;
+      setTimeout(next,m===n?900:1800);
+    };
+    o.appendChild(b);
+  });
+}
+
 // ---------- Umschrift ----------
-const LEAD=['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'];
-const VOW=['a','ae','ya','yae','eo','e','yeo','ye','o','wa','wae','oe','yo','u','wo','we','wi','yu','eu','ui','i'];
-const TAIL=['','k','k','k','n','n','n','t','l','k','m','l','l','l','p','l','m','p','p','t','t','ng','t','t','k','t','p','t'];
 
 function korToLat(s){
   let out='',parts=[];

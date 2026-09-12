@@ -189,7 +189,7 @@ textarea:focus{border-color:var(--blau)}
     <button data-v="voc"><span class="k">말</span><span>Vokabeln<small>Liste, Karten, Auswahl</small></span></button>
     <button data-v="kap"><span class="k">책</span><span>Lehrbuch<small>20 Kapitel aus „Koreanisch leicht gemacht"</small></span></button>
     <button data-v="tr"><span class="k">⇄</span><span>Übersetzen<small>Umschrift in beide Richtungen</small></span></button>
-    <div id="tempo"><span class="k">🔊</span><span><b>Sprechtempo</b> <small id="tempo-val">normal</small><input type="range" id="tempo-in" min="40" max="120" step="5" value="85"><button class="spk" id="tempo-test" style="margin:6px 0 0;padding:6px 12px;font-size:13px">Probe: 안녕하세요</button></span></div>
+    <div id="tempo"><span class="k">🔊</span><span><b>Sprechtempo</b> <small id="tempo-val">normal</small><input type="range" id="tempo-in" min="40" max="120" step="5" value="85"><div style="margin-top:10px"><b>Stimme</b><br><select class="vsel" id="voice-in" style="margin:6px 0 0;padding:8px 10px;font-size:14px"></select></div><small style="display:block;margin:6px 0 0;line-height:1.4">Bessere Stimme laden: Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Koreanisch → Yuna (Premium).</small><button class="spk" id="tempo-test" style="margin:8px 0 0;padding:6px 12px;font-size:13px">Probe: 안녕하세요</button></span></div>
   </div>
 </header>
 
@@ -400,10 +400,16 @@ document.addEventListener('click',e=>{if(e.target.id==='e-clear'&&confirm('Fehle
 
 // ---------- Sprachausgabe ----------
 const synth=window.speechSynthesis;let koVoice=null;
+let VOICEPREF='';try{VOICEPREF=localStorage.getItem('hangul-stimme')||''}catch(e){}
+function voiceRank(v){const n=(v.name||'').toLowerCase();return (n.includes('premium')?3:n.includes('enhanced')||n.includes('erweitert')?2:1)+(n.includes('siri')?0.5:0)}
 function pickVoice(){
   if(!synth)return;
-  const vs=synth.getVoices();
-  koVoice=vs.find(v=>v.lang==='ko-KR')||vs.find(v=>v.lang.toLowerCase().startsWith('ko'))||null;
+  const vs=synth.getVoices().filter(v=>v.lang&&v.lang.toLowerCase().startsWith('ko'));
+  vs.sort((a,b)=>voiceRank(b)-voiceRank(a));
+  koVoice=vs.find(v=>v.voiceURI===VOICEPREF||v.name===VOICEPREF)||vs[0]||null;
+  const sel=document.getElementById('voice-in');
+  if(sel){sel.innerHTML='';if(!vs.length){const o=document.createElement('option');o.textContent='keine koreanische Stimme installiert';sel.appendChild(o)}
+    vs.forEach(v=>{const o=document.createElement('option');o.value=v.voiceURI||v.name;o.textContent=v.name+(voiceRank(v)>=3?' ★ beste Qualität':voiceRank(v)>=2?' ✦ gut':'');if(v===koVoice)o.selected=true;sel.appendChild(o)});}
   const nov=document.getElementById('nov');
   if(nov)nov.textContent=koVoice?'':'Keine koreanische Stimme gefunden. Unter Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Koreanisch laden.';
 }
@@ -434,6 +440,9 @@ function say(text,rate){
   inp.onclick=e=>e.stopPropagation();
   document.getElementById('tempo-test').onclick=e=>{e.stopPropagation();say('안녕하세요')};
   document.getElementById('tempo').onclick=e=>e.stopPropagation();
+  const vsel=document.getElementById('voice-in');
+  vsel.onchange=()=>{VOICEPREF=vsel.value;try{localStorage.setItem('hangul-stimme',VOICEPREF)}catch(e){}pickVoice();say('안녕하세요')};
+  pickVoice();
 })();
 
 // Vokal als Silbenblock mit stummem ㅇ darstellen (ㅏ → 아)

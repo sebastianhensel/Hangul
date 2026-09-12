@@ -30,6 +30,10 @@ header{position:sticky;top:0;z-index:5;background:var(--paper);padding:calc(10px
 #menu button.on{background:var(--blauhell)}#menu button.on .k{color:var(--blau)}
 #menu button small{display:block;color:var(--mute);font-size:12px;margin-top:1px}
 #menu button span{flex:1}
+#tempo{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--blauhell)}
+#tempo .k{font-size:18px;width:30px;text-align:center}
+#tempo>span{flex:1}#tempo b{font-size:14px}#tempo small{color:var(--mute);font-size:12px;margin-left:6px}
+#tempo input{width:100%;margin-top:6px;accent-color:var(--blau)}
 main{padding:16px 16px 24px;max-width:560px;margin:0 auto}
 .view{display:none}.view.on{display:block}
 
@@ -185,6 +189,7 @@ textarea:focus{border-color:var(--blau)}
     <button data-v="voc"><span class="k">말</span><span>Vokabeln<small>Liste, Karten, Auswahl</small></span></button>
     <button data-v="kap"><span class="k">책</span><span>Lehrbuch<small>20 Kapitel aus „Koreanisch leicht gemacht"</small></span></button>
     <button data-v="tr"><span class="k">⇄</span><span>Übersetzen<small>Umschrift in beide Richtungen</small></span></button>
+    <div id="tempo"><span class="k">🔊</span><span><b>Sprechtempo</b> <small id="tempo-val">normal</small><input type="range" id="tempo-in" min="40" max="120" step="5" value="85"><button class="spk" id="tempo-test" style="margin:6px 0 0;padding:6px 12px;font-size:13px">Probe: 안녕하세요</button></span></div>
   </div>
 </header>
 
@@ -223,6 +228,7 @@ textarea:focus{border-color:var(--blau)}
     <label><input type="checkbox" id="s-syl"> Silben</label>
     <label><input type="checkbox" id="s-build"> Silbenbau (V / KV / VK / KVK)</label>
     <label><input type="checkbox" id="s-num"> Zahlen</label>
+    <label><input type="checkbox" id="s-rev"> Wiederholung (Fehlerkiste: <span id="e-count">leer</span>)</label>
   </div>
   <div id="numopts" style="display:none">
     <div class="seg" id="nsys"><button data-s="sino" class="on">Sino</button><button data-s="nat">Rein koreanisch</button><button data-s="both">Beide</button></div>
@@ -236,6 +242,7 @@ textarea:focus{border-color:var(--blau)}
   </div>
   <div class="opts" id="opts"></div>
   <div class="score"><span>Richtig: <b id="sc-ok">0</b></span><span>Serie: <b id="sc-streak">0</b></span><span>Gesamt: <b id="sc-all">0</b></span></div>
+  <p class="note" style="margin-top:14px">Falsche Antworten landen automatisch in der Fehlerkiste und werden bei „Wiederholung" erneut abgefragt, bis sie zweimal hintereinander richtig waren. Die Fehlerkiste bleibt auf diesem Gerät gespeichert. <button class="spk" id="e-clear" style="padding:4px 10px;font-size:13px">Fehlerkiste leeren</button></p>
 </section>
 
 <!-- ZAHLEN -->
@@ -259,7 +266,7 @@ textarea:focus{border-color:var(--blau)}
     <button data-d="kd" class="on">Koreanisch → Deutsch</button>
     <button data-d="dk">Deutsch → Koreanisch</button>
   </div>
-  <select class="vsel" id="vsrc"><option value="">Alltagsthemen (Auswahl unten)</option></select>
+  <select class="vsel" id="vsrc"><option value="">Alltagsthemen (Auswahl unten)</option><option value="__err">Wiederholung: falsch beantwortete Vokabeln (0)</option></select>
   <div class="chk" id="vthemes"></div>
   <p class="legend"><b>Locker</b> unter Freunden und zu Jüngeren · <b style="color:var(--blau)">Höflich</b> die sichere Standardform · <b>Formell</b> im Beruf und zu Fremden · <b style="color:var(--rot)">Ehrerbietig</b> über oder zu Älteren und Respektspersonen. Formen und einzelne Silben antippen zum Anhören. Die Silbenumschrift ist buchstabengetreu; im Wortfluss verschleifen sich Laute, z.&nbsp;B. 합니다 → „hamnida“.</p>
   <div id="v-list"></div>
@@ -372,6 +379,25 @@ const JAMO_C='ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ',JAMO_V=
 const LEAD=['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'];
 const VOW=['a','ae','ya','yae','eo','e','yeo','ye','o','wa','wae','oe','yo','u','wo','we','wi','yu','eu','ui','i'];
 const TAIL=['','k','k','k','n','n','n','t','l','k','m','l','l','l','p','l','m','p','p','t','t','ng','t','t','k','t','p','t'];
+// ---------- Fehlerkiste (lokaler Speicher, pro Gerät) ----------
+const EK='hangul-fehler';
+let ERR={};try{ERR=JSON.parse(localStorage.getItem(EK)||'{}')}catch(e){ERR={}}
+function esave(){try{localStorage.setItem(EK,JSON.stringify(ERR))}catch(e){}}
+// kind: letter (Zeichen), syl (Silbe), num (n|sys), build (Silbe), voc (Wort). Nach 2 richtigen Antworten in Folge wird der Eintrag gelöscht.
+function mark(kind,id,right){
+  const k=kind+':'+id;
+  if(right){if(ERR[k]){ERR[k].r=(ERR[k].r||0)+1;if(ERR[k].r>=2)delete ERR[k]}}
+  else ERR[k]={w:(ERR[k]?ERR[k].w:0)+1,r:0,t:Date.now()};
+  esave();eupdate();
+}
+function elist(kinds){return Object.keys(ERR).filter(k=>kinds.includes(k.split(':')[0])).map(k=>({kind:k.split(':')[0],id:k.slice(k.indexOf(':')+1),w:ERR[k].w}))}
+function eupdate(){
+  const a=elist(['letter','syl','num','build']).length,b=elist(['voc']).length;
+  const ea=document.getElementById('e-count');if(ea)ea.textContent=a?`${a} offen`:'leer';
+  const eb=document.getElementById('vsrc');if(eb){const o=eb.querySelector('option[value="__err"]');if(o)o.textContent=`Wiederholung: falsch beantwortete Vokabeln (${b})`}
+}
+document.addEventListener('click',e=>{if(e.target.id==='e-clear'&&confirm('Fehlerkiste wirklich leeren?')){ERR={};esave();eupdate();if(typeof next==='function'&&document.getElementById('v-quiz').classList.contains('on'))next();if(document.getElementById('vsrc').value==='__err')vrestart()}});
+
 // ---------- Sprachausgabe ----------
 const synth=window.speechSynthesis;let koVoice=null;
 function pickVoice(){
@@ -390,13 +416,25 @@ function speakable(x){
   if(vi>=0)return String.fromCharCode(0xAC00+11*588+vi*28); // ㅇ + Vokal
   return x;
 }
+let TEMPO=0.85;try{TEMPO=parseFloat(localStorage.getItem('hangul-tempo'))||0.85}catch(e){}
+function tempoLabel(v){return v<=0.55?'sehr langsam':v<=0.75?'langsam':v<=0.95?'normal':'schnell'}
 function say(text,rate){
   if(!synth||!text)return;
   synth.cancel();
   const u=new SpeechSynthesisUtterance(text);
-  u.lang='ko-KR';if(koVoice)u.voice=koVoice;u.rate=rate||0.85;
+  u.lang='ko-KR';if(koVoice)u.voice=koVoice;
+  // rate ist relativ zum Standard 0.85 (einzelne Laute/Silben werden ohnehin langsamer gesprochen)
+  u.rate=Math.max(0.3,Math.min(1.5,TEMPO*((rate||0.85)/0.85)));
   synth.speak(u);
 }
+(function(){
+  const inp=document.getElementById('tempo-in'),val=document.getElementById('tempo-val');
+  inp.value=Math.round(TEMPO*100);val.textContent=tempoLabel(TEMPO);
+  inp.oninput=()=>{TEMPO=inp.value/100;val.textContent=tempoLabel(TEMPO);try{localStorage.setItem('hangul-tempo',TEMPO)}catch(e){}};
+  inp.onclick=e=>e.stopPropagation();
+  document.getElementById('tempo-test').onclick=e=>{e.stopPropagation();say('안녕하세요')};
+  document.getElementById('tempo').onclick=e=>e.stopPropagation();
+})();
 
 // Vokal als Silbenblock mit stummem ㅇ darstellen (ㅏ → 아)
 const isVow=x=>JAMO_V.includes(x[0]);
@@ -438,9 +476,10 @@ let bl=2,bv=0,bt=0;
 })();
 // Übung
 const BLEADS=[0,2,3,5,6,7,9,11,12,14,15,16,17,18],BVOWS=[0,2,4,6,8,12,13,17,18,20],BTAILS=[0,0,1,4,7,8,16,17,19,21];
-function bq(){
+function bq(forced){
   cur=null;ncur=null;
-  const l=rnd(BLEADS),v=rnd(BVOWS),t=rnd(BTAILS),s=compose(l,v,t),st=structOf(l,t);
+  let l,v,t;if(forced){const x=forced.codePointAt(0)-0xAC00;l=Math.floor(x/588);v=Math.floor((x%588)/28);t=x%28}else{l=rnd(BLEADS);v=rnd(BVOWS);t=rnd(BTAILS)}
+  const s=compose(l,v,t),st=structOf(l,t);
   const q=document.getElementById('q'),ask=document.getElementById('ask'),o=document.getElementById('opts');o.innerHTML='';
   const type=rnd(['build','split','struct']);
   let opts,correct,render;
@@ -464,7 +503,7 @@ function bq(){
     b.onclick=()=>{
       if(locked)return;locked=true;all++;
       if(x===correct){ok++;streak++;b.classList.add('ok')}else{streak=0;b.classList.add('no');[...o.children].forEach(y=>{if(y.dataset.k===correct)y.classList.add('ok')})}
-      say(s,0.8);
+      mark('build',s,x===correct);say(s,0.8);
       document.getElementById('sc-ok').textContent=ok;document.getElementById('sc-all').textContent=all;document.getElementById('sc-streak').textContent=streak;
       setTimeout(next,x===correct?800:1800);
     };
@@ -515,7 +554,7 @@ let dir='kd',cur=null,locked=false,ok=0,all=0,streak=0;
 document.querySelectorAll('#dir button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#dir button').forEach(x=>x.classList.toggle('on',x===b));dir=b.dataset.d;next();
 });
-['s-c','s-cc','s-v','s-vv','s-syl','s-build','s-num','s-listen'].forEach(id=>document.getElementById(id).onchange=next);
+['s-c','s-cc','s-v','s-vv','s-syl','s-build','s-num','s-listen','s-rev'].forEach(id=>document.getElementById(id).onchange=next);
 function pool(){
   let p=[];
   if(document.getElementById('s-c').checked)p=p.concat(C);
@@ -531,14 +570,26 @@ function next(){
   document.getElementById('numopts').style.display=wantNum?'':'none';
   const wantSyl=document.getElementById('s-syl').checked;
   const wantBuild=document.getElementById('s-build').checked;
-  const modes=[];if(p.length)modes.push('l');if(wantSyl)modes.push('s');if(wantBuild)modes.push('b');if(wantNum)modes.push('n');
-  const m=modes.length?rnd(modes):'l';
+  const rev=document.getElementById('s-rev').checked?elist(['letter','syl','num','build']):[];
+  const modes=[];if(p.length)modes.push('l');if(wantSyl)modes.push('s');if(wantBuild)modes.push('b');if(wantNum)modes.push('n');if(rev.length)modes.push('r');
+  let m=modes.length?rnd(modes):'l';
+  if(m==='r'&&(modes.length===1||Math.random()<.6)){
+    const it=rnd(rev);
+    if(it.kind==='num'){const [n,sys]=it.id.split('|');nq({n:+n,sys});return}
+    if(it.kind==='syl'){sq(SYL.find(x=>x[0]===it.id));return}
+    if(it.kind==='build'){bq(it.id);return}
+    if(it.kind==='letter'){const c=C.concat(CC,V,VV).find(x=>x[0]===it.id);if(c){lq(c,p.length?p:C.concat(V));return}}
+  }else if(m==='r')m=modes.filter(x=>x!=='r').length?rnd(modes.filter(x=>x!=='r')):'l';
   if(m==='n'){nq();return}
   if(m==='b'){bq();return}
   if(m==='s'){sq();return}
   if(!p.length){document.getElementById('s-c').checked=true;return next()}
+  let c;do{c=rnd(p)}while(c===cur&&p.length>1);
+  lq(c,p);
+}
+function lq(c,p){
   document.getElementById('q').classList.remove('lat');delete document.getElementById('q').dataset.say;
-  let c;do{c=rnd(p)}while(c===cur&&p.length>1);cur=c;
+  cur=c;ncur=null;if(!p.includes(c))p=p.concat([c]);
   const others=new Set([c]);while(others.size<4)others.add(rnd(p));
   const opts=[...others].sort(()=>Math.random()-.5);
   const q=document.getElementById('q');
@@ -557,6 +608,7 @@ function answer(b,right){
   if(right){ok++;streak++;b.classList.add('ok')}
   else{streak=0;b.classList.add('no');
     [...document.getElementById('opts').children].forEach(x=>{if(x.dataset.k===(dir==='kd'?cur[1]:cur[0]))x.classList.add('ok')});}
+  mark('letter',cur[0],right);
   document.getElementById('sc-ok').textContent=ok;document.getElementById('sc-all').textContent=all;document.getElementById('sc-streak').textContent=streak;
   setTimeout(next,right?600:1400);
 }
@@ -780,6 +832,7 @@ THEMES.forEach((t,i)=>{
 function vpool(){
   const src=document.getElementById('vsrc').value;
   document.getElementById('vthemes').style.display=src?'none':'';
+  if(src==='__err'){const ids=elist(['voc']).map(e=>e.id);const all=Object.values(VOC).flat();const out=[];ids.forEach(id=>{const w=all.find(x=>x[0]===id);if(w)out.push(w)});return out}
   if(src)return VOC[src].slice();
   let p=[];[...vthemes.querySelectorAll('input')].forEach((c,i)=>{if(c.checked)p=p.concat(VOC[THEMES[i]])});
   const seen=new Set();p=p.filter(w=>{if(seen.has(w[0]))return false;seen.add(w[0]);return true});
@@ -802,6 +855,8 @@ function vrestart(){
 function vlist(){
   const el=document.getElementById('v-list');el.innerHTML='';
   const src=document.getElementById('vsrc').value;
+  if(src==='__err'){const p=vpool();const h=document.createElement('h2');h.textContent='Fehlerkiste';el.appendChild(h);if(!p.length){const n=document.createElement('p');n.className='note';n.textContent='Noch keine Fehler gesammelt – die Kiste füllt sich beim Üben mit Karten und Auswahl.';el.appendChild(n)}
+    p.forEach(w=>{const r=document.createElement('div');r.className='vrow';r.innerHTML=`<span class="ko">${w[0]}</span><span class="ro">${w[1]}</span><span class="de">${w[2]}</span>`+sylHtml(w[0])+formsHtml(w[0]);r.onclick=e=>{if(!e.target.closest('.fc,.sy'))say(w[0])};el.appendChild(r)});return}
   const themes=src?[src]:THEMES;
   themes.forEach((t,i)=>{
     if(!src&&!vthemes.querySelectorAll('input')[i].checked)return;
@@ -815,7 +870,7 @@ function vlist(){
 }
 function vcard(){
   const c=document.getElementById('vc');
-  if(!vqueue.length){c.innerHTML='<div class="q lat" style="font-size:24px">Alle Karten gewusst.</div><div class="ask">Themen ändern oder neu starten.</div>';
+  if(!vqueue.length){c.innerHTML='<div class="q lat" style="font-size:24px">'+(document.getElementById('vsrc').value==='__err'?'Fehlerkiste ist leer.':'Alle Karten gewusst.')+'</div><div class="ask">Themen ändern oder neu starten.</div>';
     document.getElementById('vc-btns').style.display='none';document.getElementById('vc-restart').style.display='';return}
   document.getElementById('vc-btns').style.display='';document.getElementById('vc-restart').style.display='none';
   vcur=vqueue[0];flipped=false;vcardDraw();
@@ -829,13 +884,15 @@ function vcardDraw(){
 }
 document.getElementById('vc').onclick=e=>{if(!vcur||e.target.closest('.sy,.fc'))return;flipped=!flipped;vcardDraw();if(flipped&&vdir!=='kd')say(vcur[0])};
 document.getElementById('vc-say').onclick=e=>{e.stopPropagation();if(vcur)say(vcur[0])};
-document.getElementById('vc-no').onclick=()=>{vqueue.push(vqueue.shift());vcard()};
-document.getElementById('vc-yes').onclick=()=>{vqueue.shift();vcard()};
+document.getElementById('vc-no').onclick=()=>{mark('voc',vcur[0],false);vqueue.push(vqueue.shift());vcard()};
+document.getElementById('vc-yes').onclick=()=>{mark('voc',vcur[0],true);vqueue.shift();vcard()};
 document.getElementById('vc-restart').onclick=vrestart;
 function vmc(){
-  vlock=false;const p=vpool();
+  vlock=false;let p=vpool();
+  if(!p.length){document.getElementById('vq').innerHTML='<div class="q vq lat" style="font-size:22px">Fehlerkiste ist leer.</div><div class="ask">Nichts zu wiederholen.</div>';document.getElementById('vopts').innerHTML='';return}
   let c;do{c=rnd(p)}while(c===vcur&&p.length>1);vcur=c;
-  const set=new Set([c]);while(set.size<4)set.add(rnd(p));
+  const fill=p.length<4?Object.values(VOC).flat():p;
+  const set=new Set([c]);let g=0;while(set.size<4&&g++<200){const x=rnd(fill);if(![...set].some(y=>y[0]===x[0]))set.add(x)}
   const opts=[...set].sort(()=>Math.random()-.5);
   document.getElementById('vq').innerHTML=vdir==='kd'?`<div class="q vq">${c[0]}</div><div class="ask">${c[1]}</div>`+sylHtml(c[0]):`<div class="q vq lat">${c[2]}</div><div class="ask">Welches Wort ist das?</div><div id="vq-syl"></div>`;
   const o=document.getElementById('vopts');o.innerHTML='';
@@ -845,6 +902,7 @@ function vmc(){
       if(vlock)return;vlock=true;vall++;
       if(x===c){vok++;b.classList.add('ok')}
       else{b.classList.add('no');[...o.children].forEach(y=>{if(y.textContent===(vdir==='kd'?c[2]:c[0]))y.classList.add('ok')})}
+      mark('voc',c[0],x===c);
       document.getElementById('vsc-ok').textContent=vok;document.getElementById('vsc-all').textContent=vall;
       if(vdir!=='kd'){say(c[0]);document.getElementById('vq-syl').innerHTML=`<div class="ask" style="margin-top:12px">${c[0]} · ${c[1]}</div>`+sylHtml(c[0])}
       setTimeout(vmc,x===c?1200:2200);
@@ -853,11 +911,11 @@ function vmc(){
   });
 }
 document.getElementById('vq-say').onclick=()=>{if(vcur)say(vcur[0])};
-vrestart();
+vrestart();eupdate();
 
 // Silben-Frage: Ablenker teilen Konsonant oder Vokal mit der Lösung
-function sq(){
-  ncur=null;const c=rnd(SYL);cur=c;
+function sq(forced){
+  ncur=null;const c=forced||rnd(SYL);cur=c;
   const q=document.getElementById('q'),ask=document.getElementById('ask');
   const near=SYL.filter(x=>x!==c&&(x[2]===c[2]||x[3]===c[3]));
   const set=new Set([c]);while(set.size<4)set.add(rnd(near));
@@ -871,7 +929,7 @@ function sq(){
     b.onclick=()=>{
       if(locked)return;locked=true;all++;
       if(x===c){ok++;streak++;b.classList.add('ok')}else{streak=0;b.classList.add('no');[...o.children].forEach(y=>{if(y.dataset.k===(dir==='kd'?c[1]:c[0]))y.classList.add('ok')})}
-      say(c[0],0.8);
+      mark('syl',c[0],x===c);say(c[0],0.8);
       document.getElementById('sc-ok').textContent=ok;document.getElementById('sc-all').textContent=all;document.getElementById('sc-streak').textContent=streak;
       setTimeout(next,x===c?700:1500);
     };
@@ -884,11 +942,11 @@ function segInit(id,cb){document.querySelectorAll('#'+id+' button').forEach(b=>b
 segInit('nsys',d=>{nsys=d.s;next()});
 segInit('nrange',d=>{nrange=+d.r;next()});
 function nword(n,sys){return sys==='sino'?sino(n):nat(n)}
-function nq(){
+function nq(forced){
   cur=null;
-  const sys=nsys==='both'?(Math.random()<.5?'sino':'nat'):nsys;
-  const max=sys==='nat'&&nrange===100?99:nrange;
-  let n;do{n=1+Math.floor(Math.random()*max)}while(ncur&&n===ncur.n&&max>1);
+  const sys=forced?forced.sys:(nsys==='both'?(Math.random()<.5?'sino':'nat'):nsys);
+  const max=forced?Math.max(forced.n,10):(sys==='nat'&&nrange===100?99:nrange);
+  let n;if(forced)n=forced.n;else do{n=1+Math.floor(Math.random()*max)}while(ncur&&n===ncur.n&&max>1);
   const listen=document.getElementById('s-listen').checked&&Math.random()<.5;
   ncur={n,sys,listen};
   const w=nword(n,sys),label=sys==='sino'?'Sino-koreanisch':'Rein koreanisch';
@@ -908,7 +966,7 @@ function nq(){
     b.onclick=()=>{
       if(locked)return;locked=true;all++;
       if(m===n){ok++;streak++;b.classList.add('ok')}else{streak=0;b.classList.add('no');[...o.children].forEach(y=>{if(+y.dataset.n===n)y.classList.add('ok')})}
-      say(w[0]);
+      mark('num',n+'|'+sys,m===n);say(w[0]);
       document.getElementById('sc-ok').textContent=ok;document.getElementById('sc-all').textContent=all;document.getElementById('sc-streak').textContent=streak;
       setTimeout(next,m===n?900:1800);
     };

@@ -1052,6 +1052,37 @@ function run(){
 }
 inp.oninput=run;
 document.getElementById('tr-say').onclick=()=>{const s=inp.value.trim();if(!s)return;say(trdir==='kd'?s:latToKor(s))};
+// ---------- Zustand merken (Bereich, Modi, Auswahl) ----------
+const SK='hangul-zustand';
+function ssave(){
+  try{
+    const st={view:document.querySelector('#menu button.on')?.dataset.v,dir,vmode,vdir,vsrc:document.getElementById('vsrc').value,
+      chk:Object.fromEntries([...document.querySelectorAll('#v-quiz input[type=checkbox]')].map(c=>[c.id,c.checked])),
+      themes:[...document.querySelectorAll('#vthemes input')].map(c=>c.checked),nsys,nrange,trdir,
+      klist:kcur?kcur.n:null};
+    localStorage.setItem(SK,JSON.stringify(st));
+  }catch(e){}
+}
+function srestore(){
+  let st=null;try{st=JSON.parse(localStorage.getItem(SK)||'null')}catch(e){}
+  if(!st)return;
+  if(st.chk)Object.entries(st.chk).forEach(([id,v])=>{const c=document.getElementById(id);if(c)c.checked=v});
+  if(st.themes){const cs=document.querySelectorAll('#vthemes input');st.themes.forEach((v,i)=>{if(cs[i])cs[i].checked=v})}
+  if(st.vsrc!==undefined){const sel=document.getElementById('vsrc');if([...sel.options].some(o=>o.value===st.vsrc))sel.value=st.vsrc}
+  const seg=(id,attr,val)=>{const b=document.querySelector('#'+id+' [data-'+attr+'="'+val+'"]');if(b){document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.toggle('on',x===b))}};
+  if(st.dir){dir=st.dir;seg('dir','d',dir)}
+  if(st.vmode){vmode=st.vmode;seg('vmode','m',vmode)}
+  if(st.vdir){vdir=st.vdir;seg('vdir','d',vdir)}
+  if(st.nsys){nsys=st.nsys;seg('nsys','s',nsys)}
+  if(st.nrange){nrange=st.nrange;seg('nrange','r',nrange)}
+  if(st.trdir){trdir=st.trdir;seg('trdir','d',trdir);inp.placeholder=trdir==='kd'?'안녕하세요':'annyeonghaseyo';trnote.textContent=notes[trdir]}
+  vrestart();
+  if(st.view){const b=document.querySelector('#menu [data-v="'+st.view+'"]');if(b)b.click()}
+  if(st.klist){const k=KAP.find(x=>x.n===st.klist);if(k)kshow(k)}
+}
+document.addEventListener('change',ssave);
+document.addEventListener('click',e=>{if(e.target.closest('#menu button,.seg button,#kback,.krow,#kpract'))setTimeout(ssave,0)});
+srestore();ssave();
 </script>
 </body>
 </html>

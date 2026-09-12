@@ -71,7 +71,7 @@ h2{font-size:17px;font-weight:700;margin:20px 0 8px}
 .st th,.st td{border:1px solid var(--line);text-align:center;padding:0;min-width:44px}
 .st th{font-size:12px;color:var(--mute);font-weight:600;padding:4px 2px;line-height:1.2}
 .st th b{display:block;font-size:20px;color:var(--blau)}
-.st td:first-child{position:sticky;left:0;background:var(--paper);z-index:1}
+.st th:first-child{position:sticky;left:0;background:var(--paper);z-index:1}
 .st th.v b{color:var(--rot)}
 .st td button{width:100%;padding:8px 2px;border:0;background:none;font:inherit;font-size:22px;font-weight:600;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .st td button:active{background:var(--blauhell)}
@@ -447,7 +447,7 @@ const SYL=[];STC.forEach(c=>STV.forEach(v=>{const b=syl(c,v);SYL.push([b,korToLa
 (function(){
   const t=document.getElementById('syltab');
   let h='<tr><th></th>'+STC.map(c=>`<th><b>${c}</b>${LEAD[JAMO_C.indexOf(c)]||'–'}</th>`).join('')+'</tr>';
-  STV.forEach(v=>{h+=`<tr><td><th class="v" style="display:block;border:0"><b>${v}</b>${VOW[JAMO_V.indexOf(v)]}</th></td>`+STC.map(c=>{const b=syl(c,v);return `<td><button data-ko="${b}">${b}</button></td>`}).join('')+'</tr>'});
+  STV.forEach(v=>{h+=`<tr><th class="v"><b>${v}</b>${VOW[JAMO_V.indexOf(v)]}</th>`+STC.map(c=>{const b=syl(c,v);return `<td><button data-ko="${b}">${b}</button></td>`}).join('')+'</tr>'});
   t.innerHTML=h;
   t.onclick=e=>{const b=e.target.closest('button');if(b)say(b.dataset.ko,0.8)};
 })();

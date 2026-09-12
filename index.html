@@ -53,12 +53,35 @@ h2{font-size:17px;font-weight:700;margin:20px 0 8px}
 .sheet .hint{text-align:center;color:var(--mute);font-size:16px;line-height:1.45}
 .sheet .ex{margin-top:16px;padding:12px;border-radius:12px;background:var(--blauhell);font-size:16px;text-align:center}
 .sheet .ex b{font-size:22px}
+.sheet .ex .nm{font-size:13px;color:var(--mute);margin-bottom:8px}
 .sheet button{margin-top:16px;width:100%}
 .spk{display:inline-flex;align-items:center;gap:6px;margin:10px auto 0;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font:inherit;font-size:15px;color:var(--blau);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .spk.big{padding:11px 20px;font-size:16px}
 .spkrow{display:flex;justify-content:center;gap:8px}
 .sheet .spk{margin-top:0}
 .nov{color:var(--mute);font-size:13px;text-align:center;margin-top:8px}
+
+/* Silbentafel */
+.stwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px}
+.st{border-collapse:collapse;font-size:20px}
+.st th,.st td{border:1px solid var(--line);text-align:center;padding:0;min-width:44px}
+.st th{font-size:12px;color:var(--mute);font-weight:600;padding:4px 2px;line-height:1.2}
+.st th b{display:block;font-size:20px;color:var(--blau)}
+.st td:first-child{position:sticky;left:0;background:var(--paper);z-index:1}
+.st th.v b{color:var(--rot)}
+.st td button{width:100%;padding:8px 2px;border:0;background:none;font:inherit;font-size:22px;font-weight:600;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.st td button:active{background:var(--blauhell)}
+
+/* Silben-Baukasten */
+.bk{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0 10px}
+.bk button{min-width:36px;padding:7px 6px;border:1px solid var(--line);border-radius:8px;background:none;font:inherit;font-size:18px;font-weight:600;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.bk button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.bk.v button.on{background:var(--rot);border-color:var(--rot)}
+.bk.c button.on{background:var(--blau);border-color:var(--blau)}
+.blabel{font-size:12px;color:var(--mute);font-weight:600;margin-top:8px}
+#b-out{font-size:96px;font-weight:600;text-align:center;line-height:1.1;margin:6px 0}
+#b-info{font-size:14px;line-height:1.5;text-align:center;color:var(--mute)}
+#b-info b{color:var(--blau);font-size:16px}
 
 /* Buttons */
 .btn{display:block;width:100%;padding:14px;border-radius:12px;border:0;font:inherit;font-size:16px;font-weight:600;background:var(--ink);color:#fff;cursor:pointer}
@@ -133,6 +156,13 @@ h2{font-size:17px;font-weight:700;margin:20px 0 8px}
 .vrow .sb{grid-column:1/3}
 .card .sb{justify-content:center;margin-top:12px}
 
+/* Lehrbuch */
+.krow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 2px;font:inherit;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.krow .kn{width:30px;height:30px;border-radius:50%;background:var(--blauhell);color:var(--blau);font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.krow b{display:block;font-size:15px}.krow small{display:block;color:var(--mute);font-size:13px;margin-top:1px}
+.kt{font-size:13px;color:var(--mute);font-weight:600;margin-bottom:8px}
+select.vsel{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;font:inherit;font-size:15px;background:var(--paper);color:var(--ink);margin-bottom:12px;-webkit-appearance:none;appearance:none}
+
 /* Übersetzen */
 textarea{width:100%;min-height:96px;padding:14px;border-radius:14px;border:1px solid var(--line);font:inherit;font-size:22px;resize:vertical;outline:none;background:var(--paper);color:var(--ink)}
 textarea:focus{border-color:var(--blau)}
@@ -153,6 +183,7 @@ textarea:focus{border-color:var(--blau)}
     <button data-v="quiz"><span class="k">?</span><span>Üben<small>Zeichen und Zahlen abfragen</small></span></button>
     <button data-v="num"><span class="k">1</span><span>Zahlen<small>Beide Zahlensysteme nachschlagen</small></span></button>
     <button data-v="voc"><span class="k">말</span><span>Vokabeln<small>Liste, Karten, Auswahl</small></span></button>
+    <button data-v="kap"><span class="k">책</span><span>Lehrbuch<small>20 Kapitel aus „Koreanisch leicht gemacht"</small></span></button>
     <button data-v="tr"><span class="k">⇄</span><span>Übersetzen<small>Umschrift in beide Richtungen</small></span></button>
   </div>
 </header>
@@ -165,6 +196,16 @@ textarea:focus{border-color:var(--blau)}
   <h2>Doppelkonsonanten (5)</h2><div class="grid" id="g-cc"></div>
   <h2>Grundvokale (10)</h2><div class="grid" id="g-v"></div>
   <h2>Zusammengesetzte Vokale (11)</h2><div class="grid" id="g-vv"></div>
+  <h2>Silben-Baukasten</h2>
+  <p class="note" style="margin:0 0 6px">Jede Silbe braucht einen Vokal. Davor kann ein Konsonant stehen (Anlaut), danach einer oder zwei (Auslaut, „Batchim"). Ohne Anlaut wird das stumme ㅇ geschrieben.</p>
+  <div class="blabel">Anlaut (K)</div><div class="bk c" id="b-l"></div>
+  <div class="blabel">Vokal (V)</div><div class="bk v" id="b-v"></div>
+  <div class="blabel">Auslaut / Batchim (K, optional)</div><div class="bk c" id="b-t"></div>
+  <div class="card" style="padding:14px"><div id="b-out"></div><div id="b-info"></div><button class="spk" id="b-say">🔊 Anhören</button></div>
+
+  <h2>Silbentafel (자모표)</h2>
+  <p class="note" style="margin:0 0 8px">Konsonant × Vokal = Silbe. Tabelle seitlich wischen, Silbe antippen zum Anhören.</p>
+  <div class="stwrap"><table class="st" id="syltab"></table></div>
   <p class="note">Tippe ein Zeichen für Aussprache und Beispiel. Blau = Konsonant, Rot = Vokal. Vokale werden doppelt gezeigt: links das reine Zeichen (ㅏ), rechts als Silbe mit stummem ㅇ (아), so wie es geschrieben und gesprochen wird.</p>
 </section>
 
@@ -179,6 +220,8 @@ textarea:focus{border-color:var(--blau)}
     <label><input type="checkbox" id="s-cc"> Doppelkonsonanten</label>
     <label><input type="checkbox" id="s-v" checked> Vokale</label>
     <label><input type="checkbox" id="s-vv"> Zusammengesetzte Vokale</label>
+    <label><input type="checkbox" id="s-syl"> Silben</label>
+    <label><input type="checkbox" id="s-build"> Silbenbau (V / KV / VK / KVK)</label>
     <label><input type="checkbox" id="s-num"> Zahlen</label>
   </div>
   <div id="numopts" style="display:none">
@@ -216,6 +259,7 @@ textarea:focus{border-color:var(--blau)}
     <button data-d="kd" class="on">Koreanisch → Deutsch</button>
     <button data-d="dk">Deutsch → Koreanisch</button>
   </div>
+  <select class="vsel" id="vsrc"><option value="">Alltagsthemen (Auswahl unten)</option></select>
   <div class="chk" id="vthemes"></div>
   <p class="legend"><b>Locker</b> unter Freunden und zu Jüngeren · <b style="color:var(--blau)">Höflich</b> die sichere Standardform · <b>Formell</b> im Beruf und zu Fremden · <b style="color:var(--rot)">Ehrerbietig</b> über oder zu Älteren und Respektspersonen. Formen und einzelne Silben antippen zum Anhören. Die Silbenumschrift ist buchstabengetreu; im Wortfluss verschleifen sich Laute, z.&nbsp;B. 합니다 → „hamnida“.</p>
   <div id="v-list"></div>
@@ -232,6 +276,13 @@ textarea:focus{border-color:var(--blau)}
     <div class="opts one" id="vopts"></div>
     <div class="score"><span>Richtig: <b id="vsc-ok">0</b></span><span>Gesamt: <b id="vsc-all">0</b></span></div>
   </div>
+</section>
+
+<!-- LEHRBUCH -->
+<section id="v-kap" class="view">
+  <p class="note" style="margin:0 0 10px">„Koreanisch leicht gemacht für Anfänger" – 20 Kapitel. Kapitel antippen für Kernsatz, Grammatik, Wortschatz und Schlüsselsätze; Wörter und Sätze sind eigene Zusammenstellungen zum Kapitelthema.</p>
+  <div id="klist"></div>
+  <div id="kdetail" style="display:none"></div>
 </section>
 
 <!-- ÜBERSETZEN -->
@@ -269,20 +320,20 @@ textarea:focus{border-color:var(--blau)}
 // ---------- Daten ----------
 // [Zeichen, Umschrift, deutsche Aussprachehilfe, Beispiel-Hangul, Beispiel-Umschrift/Bedeutung]
 const C=[
- ['ㄱ','g / k','Zwischen G und K, am Silbenende K.','가방','gabang – Tasche'],
- ['ㄴ','n','Wie deutsches N.','나무','namu – Baum'],
- ['ㄷ','d / t','Zwischen D und T, am Silbenende T.','다리','dari – Brücke, Bein'],
- ['ㄹ','r / l','Am Silbenanfang leicht gerolltes R, am Ende L.','라면','ramyeon – Ramen'],
- ['ㅁ','m','Wie deutsches M.','물','mul – Wasser'],
- ['ㅂ','b / p','Zwischen B und P, am Silbenende P.','바다','bada – Meer'],
- ['ㅅ','s / t','Wie S (vor i wie „sch"), am Silbenende T.','사람','saram – Mensch'],
- ['ㅇ','– / ng','Am Anfang stumm (Platzhalter), am Ende NG wie in „lang".','아이','ai – Kind'],
- ['ㅈ','j / t','Wie „dsch" in Dschungel, am Silbenende T.','집','jip – Haus'],
- ['ㅊ','ch / t','Wie „tsch" in Tschüss, mit Hauch.','차','cha – Tee, Auto'],
- ['ㅋ','k','Hartes K mit deutlichem Hauch.','코','ko – Nase'],
- ['ㅌ','t','Hartes T mit deutlichem Hauch.','토끼','tokki – Hase'],
- ['ㅍ','p','Hartes P mit deutlichem Hauch.','포도','podo – Weintraube'],
- ['ㅎ','h','Wie deutsches H.','하늘','haneul – Himmel'],
+ ['ㄱ','g / k','Zwischen G und K, am Silbenende K.','가방','gabang – Tasche',['기역','giyeok']],
+ ['ㄴ','n','Wie deutsches N.','나무','namu – Baum',['니은','nieun']],
+ ['ㄷ','d / t','Zwischen D und T, am Silbenende T.','다리','dari – Brücke, Bein',['디귿','digeut']],
+ ['ㄹ','r / l','Am Silbenanfang leicht gerolltes R, am Ende L.','라면','ramyeon – Ramen',['리을','rieul']],
+ ['ㅁ','m','Wie deutsches M.','물','mul – Wasser',['미음','mieum']],
+ ['ㅂ','b / p','Zwischen B und P, am Silbenende P.','바다','bada – Meer',['비읍','bieup']],
+ ['ㅅ','s / t','Wie S (vor i wie „sch"), am Silbenende T.','사람','saram – Mensch',['시옷','siot']],
+ ['ㅇ','– / ng','Am Anfang stumm (Platzhalter), am Ende NG wie in „lang".','아이','ai – Kind',['이응','ieung']],
+ ['ㅈ','j / t','Wie „dsch" in Dschungel, am Silbenende T.','집','jip – Haus',['지읒','jieut']],
+ ['ㅊ','ch / t','Wie „tsch" in Tschüss, mit Hauch.','차','cha – Tee, Auto',['치읓','chieut']],
+ ['ㅋ','k','Hartes K mit deutlichem Hauch.','코','ko – Nase',['키읔','kieuk']],
+ ['ㅌ','t','Hartes T mit deutlichem Hauch.','토끼','tokki – Hase',['티읕','tieut']],
+ ['ㅍ','p','Hartes P mit deutlichem Hauch.','포도','podo – Weintraube',['피읖','pieup']],
+ ['ㅎ','h','Wie deutsches H.','하늘','haneul – Himmel',['히읗','hieut']],
 ];
 const CC=[
  ['ㄲ','kk','Angespanntes, hartes K ohne Hauch.','꿈','kkum – Traum'],
@@ -333,7 +384,7 @@ function pickVoice(){
 if(synth){pickVoice();synth.onvoiceschanged=pickVoice}
 // Einzelne Jamo klingen isoliert schlecht – als Silbe mit ㅏ bzw. ㅇ sprechen.
 function speakable(x){
-  if(x.length>1)return x;
+  if(x.length>1||x.codePointAt(0)>=0xAC00)return x;
   const ci=JAMO_C.indexOf(x),vi=JAMO_V.indexOf(x);
   if(ci>=0)return String.fromCharCode(0xAC00+ci*588);       // Konsonant + ㅏ
   if(vi>=0)return String.fromCharCode(0xAC00+11*588+vi*28); // ㅇ + Vokal
@@ -351,6 +402,76 @@ function say(text,rate){
 const isVow=x=>JAMO_V.includes(x[0]);
 const block=x=>isVow(x)?String.fromCharCode(0xAC00+11*588+JAMO_V.indexOf(x[0])*28):x[0];
 
+// ---------- Silbentafel ----------
+const STC=['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'],STV=['ㅏ','ㅑ','ㅓ','ㅕ','ㅗ','ㅛ','ㅜ','ㅠ','ㅡ','ㅣ'];
+const syl=(c,v)=>String.fromCharCode(0xAC00+JAMO_C.indexOf(c)*588+JAMO_V.indexOf(v)*28);
+const SYL=[];STC.forEach(c=>STV.forEach(v=>{const b=syl(c,v);SYL.push([b,korToLat(b).text,c,v])}));
+(function(){
+  const t=document.getElementById('syltab');
+  let h='<tr><th></th>'+STC.map(c=>`<th><b>${c}</b>${LEAD[JAMO_C.indexOf(c)]||'–'}</th>`).join('')+'</tr>';
+  STV.forEach(v=>{h+=`<tr><td><th class="v" style="display:block;border:0"><b>${v}</b>${VOW[JAMO_V.indexOf(v)]}</th></td>`+STC.map(c=>{const b=syl(c,v);return `<td><button data-ko="${b}">${b}</button></td>`}).join('')+'</tr>'});
+  t.innerHTML=h;
+  t.onclick=e=>{const b=e.target.closest('button');if(b)say(b.dataset.ko,0.8)};
+})();
+
+// ---------- Silbenbau (Anlaut + Vokal + Auslaut/Batchim) ----------
+const TAILJ=['','ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+const HORIZ='ㅗㅛㅜㅠㅡ';
+const compose=(l,v,t)=>String.fromCharCode(0xAC00+l*588+v*28+t);
+function structOf(l,t){return (l===11?'':'K')+'V'+(t?'K':'')}
+const STRUCT_DE={V:'nur Vokal (mit stummem ㅇ)',KV:'Konsonant + Vokal',VK:'Vokal + Auslaut',KVK:'Konsonant + Vokal + Auslaut'};
+function parts(l,v,t){return [l===11?'ㅇ':JAMO_C[l],JAMO_V[v],TAILJ[t]].filter(Boolean)}
+// Baukasten
+let bl=2,bv=0,bt=0;
+(function(){
+  const mk=(id,list,cur,cb)=>{const el=document.getElementById(id);el.innerHTML='';list.forEach(([label,val])=>{const b=document.createElement('button');b.textContent=label;b.className=val===cur()?'on':'';b.onclick=()=>{cb(val);bdraw()};el.appendChild(b)})};
+  window.bdraw=function(){
+    mk('b-l',[...JAMO_C].map((c,i)=>[c,i]),()=>bl,v=>bl=v);
+    mk('b-v',[...JAMO_V].map((c,i)=>[c,i]),()=>bv,v=>bv=v);
+    mk('b-t',[['–',0],['ㄱ',1],['ㄴ',4],['ㄷ',7],['ㄹ',8],['ㅁ',16],['ㅂ',17],['ㅅ',19],['ㅇ',21],['ㅈ',22],['ㅊ',23],['ㅋ',24],['ㅌ',25],['ㅍ',26],['ㅎ',27],['ㄳ',3],['ㄵ',5],['ㄺ',9],['ㄻ',10],['ㄼ',11],['ㅄ',18]],()=>bt,v=>bt=v);
+    const s=compose(bl,bv,bt),st=structOf(bl,bt);
+    document.getElementById('b-out').textContent=s;
+    document.getElementById('b-info').innerHTML=`<b>${st}</b> – ${STRUCT_DE[st]}<br>${parts(bl,bv,bt).join(' + ')} = ${s} · <i>${korToLat(s).text}</i><br>${HORIZ.includes(JAMO_V[bv])?'Horizontaler Vokal: steht unter dem Konsonanten.':'Vertikaler Vokal: steht rechts vom Konsonanten.'}${bt?' Der Auslaut (Batchim) steht unten.':''}`;
+  };
+  bdraw();
+  document.getElementById('b-say').onclick=()=>say(compose(bl,bv,bt),0.8);
+})();
+// Übung
+const BLEADS=[0,2,3,5,6,7,9,11,12,14,15,16,17,18],BVOWS=[0,2,4,6,8,12,13,17,18,20],BTAILS=[0,0,1,4,7,8,16,17,19,21];
+function bq(){
+  cur=null;ncur=null;
+  const l=rnd(BLEADS),v=rnd(BVOWS),t=rnd(BTAILS),s=compose(l,v,t),st=structOf(l,t);
+  const q=document.getElementById('q'),ask=document.getElementById('ask'),o=document.getElementById('opts');o.innerHTML='';
+  const type=rnd(['build','split','struct']);
+  let opts,correct,render;
+  if(type==='build'){ // Bausteine → Silbe
+    q.textContent=parts(l,v,t).join(' + ');q.classList.add('lat');ask.textContent='Welche Silbe ergibt das?';
+    const alt=new Set([s]);let g=0;
+    while(alt.size<4&&g++<50){const k=rnd(['t','v','l']);alt.add(k==='t'?compose(l,v,t?0:rnd(BTAILS.filter(x=>x))):k==='v'?compose(l,rnd(BVOWS),t):compose(rnd(BLEADS),v,t))}
+    opts=[...alt];correct=s;render=x=>x;
+  }else if(type==='split'){ // Silbe → Bausteine
+    q.textContent=s;q.classList.remove('lat');ask.textContent='Aus welchen Zeichen besteht die Silbe?';
+    const P=(a,b,c)=>parts(a,b,c).join(' + ');const alt=new Set([P(l,v,t)]);let g=0;
+    while(alt.size<4&&g++<50){const k=rnd(['t','v','l','swap']);alt.add(k==='t'?P(l,v,t?0:rnd(BTAILS.filter(x=>x))):k==='v'?P(l,rnd(BVOWS),t):k==='l'?P(rnd(BLEADS),v,t):(t&&JAMO_C.indexOf(TAILJ[t])>=0?P(JAMO_C.indexOf(TAILJ[t]),v,[1,4,7,8,16,17,19,21][Math.max(0,[0,2,3,5,6,7,9,21].indexOf(l))]||4):P(rnd(BLEADS),v,t)))}
+    opts=[...alt];correct=P(l,v,t);render=x=>`<span style="font-size:20px">${x}</span>`;
+  }else{ // Struktur
+    q.textContent=s;q.classList.remove('lat');ask.textContent='Welche Silbenstruktur ist das? (K = Konsonant, V = Vokal)';
+    opts=['V','KV','VK','KVK'];correct=st;render=x=>`${x}<small>${STRUCT_DE[x]}</small>`;
+  }
+  document.getElementById('q-say').style.display='';q.dataset.say=s;
+  opts.sort(()=>Math.random()-.5).forEach(x=>{
+    const b=document.createElement('button');b.innerHTML=render(x);b.dataset.k=x;
+    b.onclick=()=>{
+      if(locked)return;locked=true;all++;
+      if(x===correct){ok++;streak++;b.classList.add('ok')}else{streak=0;b.classList.add('no');[...o.children].forEach(y=>{if(y.dataset.k===correct)y.classList.add('ok')})}
+      say(s,0.8);
+      document.getElementById('sc-ok').textContent=ok;document.getElementById('sc-all').textContent=all;document.getElementById('sc-streak').textContent=streak;
+      setTimeout(next,x===correct?800:1800);
+    };
+    o.appendChild(b);
+  });
+}
+
 // ---------- Alphabet-Ansicht ----------
 function fill(id,list,cls){
   const g=document.getElementById(id);
@@ -366,7 +487,7 @@ function show(x){
   document.getElementById('d-big').innerHTML=isVow(x)?`<span class="jamo">${x[0]}</span> ${block(x)}`:x[0];
   document.getElementById('d-rom').innerHTML=x[1]+(isVow(x)?` <span class="jm">links das reine Zeichen, rechts als Silbe mit stummem ㅇ</span>`:'');
   document.getElementById('d-hint').textContent=x[2];
-  document.getElementById('d-ex').innerHTML=`<b>${x[3]}</b><br>${x[4]}`;
+  document.getElementById('d-ex').innerHTML=(x[5]?`<div class="nm">Buchstabenname: <button class="fc" data-ko="${x[5][0]}" style="display:inline-block;padding:2px 8px"><b style="display:inline;font-size:16px">${x[5][0]}</b> <i>${x[5][1]}</i></button></div>`:'')+`<b>${x[3]}</b><br>${x[4]}`;
   document.getElementById('d-say').onclick=()=>say(speakable(x[0]),0.7);
   document.getElementById('d-sayex').onclick=()=>say(x[3]);
   det.classList.add('on');
@@ -394,7 +515,7 @@ let dir='kd',cur=null,locked=false,ok=0,all=0,streak=0;
 document.querySelectorAll('#dir button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#dir button').forEach(x=>x.classList.toggle('on',x===b));dir=b.dataset.d;next();
 });
-['s-c','s-cc','s-v','s-vv','s-num','s-listen'].forEach(id=>document.getElementById(id).onchange=next);
+['s-c','s-cc','s-v','s-vv','s-syl','s-build','s-num','s-listen'].forEach(id=>document.getElementById(id).onchange=next);
 function pool(){
   let p=[];
   if(document.getElementById('s-c').checked)p=p.concat(C);
@@ -408,9 +529,15 @@ const rnd=a=>a[Math.floor(Math.random()*a.length)];
 function next(){
   locked=false;const p=pool();const wantNum=document.getElementById('s-num').checked;
   document.getElementById('numopts').style.display=wantNum?'':'none';
-  if(wantNum&&(!p.length||Math.random()<.5)){nq();return}
+  const wantSyl=document.getElementById('s-syl').checked;
+  const wantBuild=document.getElementById('s-build').checked;
+  const modes=[];if(p.length)modes.push('l');if(wantSyl)modes.push('s');if(wantBuild)modes.push('b');if(wantNum)modes.push('n');
+  const m=modes.length?rnd(modes):'l';
+  if(m==='n'){nq();return}
+  if(m==='b'){bq();return}
+  if(m==='s'){sq();return}
   if(!p.length){document.getElementById('s-c').checked=true;return next()}
-  document.getElementById('q').classList.remove('lat');
+  document.getElementById('q').classList.remove('lat');delete document.getElementById('q').dataset.say;
   let c;do{c=rnd(p)}while(c===cur&&p.length>1);cur=c;
   const others=new Set([c]);while(others.size<4)others.add(rnd(p));
   const opts=[...others].sort(()=>Math.random()-.5);
@@ -424,7 +551,7 @@ function next(){
     b.onclick=()=>answer(b,x===c);o.appendChild(b);
   });
 }
-document.getElementById('q-say').onclick=()=>{if(cur)say(speakable(cur[0]),0.7);else if(ncur)say(nword(ncur.n,ncur.sys)[0])};
+document.getElementById('q-say').onclick=()=>{if(cur)say(speakable(cur[0]),0.7);else if(ncur)say(nword(ncur.n,ncur.sys)[0]);else{const q=document.getElementById('q');if(q.dataset.say)say(q.dataset.say,0.8)}};
 function answer(b,right){
   if(locked)return;locked=true;all++;
   if(right){ok++;streak++;b.classList.add('ok')}
@@ -490,6 +617,7 @@ const FORMS={
 '뭐':[['L','뭐','mwo'],['F','무엇','mueot']],
 '얼마예요?':[['L','얼마야?','eolmaya'],['H','얼마예요?','eolmayeyo'],['F','얼마입니까?','eolmaimnikka']],
 '어디예요?':[['L','어디야?','eodiya'],['H','어디예요?','eodiyeyo'],['F','어디입니까?','eodiimnikka']],
+'가요':[['L','가','ga'],['H','가요','gayo'],['F','갑니다','gamnida'],['E','가세요','gaseyo']],
 '가다':[['L','가','ga'],['H','가요','gayo'],['F','갑니다','gamnida'],['E','가세요','gaseyo']],
 '오다':[['L','와','wa'],['H','와요','wayo'],['F','옵니다','omnida'],['E','오세요','oseyo']],
 '먹다':[['L','먹어','meogeo'],['H','먹어요','meogeoyo'],['F','먹습니다','meokseumnida'],['E','드세요','deuseyo']],
@@ -536,9 +664,112 @@ const VOC={
 'Alltag & Orte':[['집','jip','Haus / Zuhause'],['학교','hakgyo','Schule'],['회사','hoesa','Firma'],['병원','byeongwon','Krankenhaus'],['가게','gage','Laden'],['화장실','hwajangsil','Toilette'],['역','yeok','Bahnhof'],['공항','gonghang','Flughafen'],['돈','don','Geld'],['책','chaek','Buch'],['전화','jeonhwa','Telefon'],['자동차','jadongcha','Auto'],['옷','ot','Kleidung'],['나라','nara','Land'],['한국','hanguk','Korea'],['독일','dogil','Deutschland']],
 'Zeit':[['오늘','oneul','heute'],['내일','naeil','morgen'],['어제','eoje','gestern'],['지금','jigeum','jetzt'],['아침','achim','Morgen (Tageszeit)'],['저녁','jeonyeok','Abend'],['시간','sigan','Zeit / Stunde'],['주말','jumal','Wochenende'],['년','nyeon','Jahr'],['월','wol','Monat'],['요일','yoil','Wochentag']],
 'Verben & Adjektive':[['가다','gada','gehen'],['오다','oda','kommen'],['먹다','meokda','essen'],['마시다','masida','trinken'],['보다','boda','sehen'],['하다','hada','tun / machen'],['사다','sada','kaufen'],['자다','jada','schlafen'],['좋아하다','joahada','mögen'],['공부하다','gongbuhada','lernen'],['크다','keuda','groß'],['작다','jakda','klein'],['좋다','jota','gut'],['예쁘다','yeppeuda','hübsch'],['춥다','chupda','kalt'],['덥다','deopda','heiß'],['비싸다','bissada','teuer'],['싸다','ssada','billig']],
+'Lehrbuch':[['물','mul','Wasser'],['집','jip','Haus'],['미국','miguk','U.S.A.'],['남자','namja','Mann'],['안경','angyeong','Brille'],['옷','ot','Kleidung'],['머리','meori','Kopf'],['구두','gudu','Schuhe'],['지도','jido','Landkarte'],['바다','bada','Meer'],['아버지','abeoji','Vater'],['하나','hana','eins (rein koreanisch)'],['우유','uyu','Milch'],['여기','yeogi','hier'],['야구','yagu','Baseball'],['아니요','aniyo','Nein'],['여우','yeou','Fuchs'],['가요','gayo','gehen (höfliche Form)'],['나무','namu','Baum'],['고기','gogi','Fleisch'],['소','so','Kuh'],['나이','nai','Alter'],['어머니','eomeoni','Mutter'],['가수','gasu','Sänger'],['이','i','Zähne / zwei (sino-koreanisch)'],['오','o','fünf (sino-koreanisch)'],['아이','ai','Kind'],['오이','oi','Gurke']],
+'Arbeitsblatt 1–48':[['바다','bada','Meer'],['나비','nabi','Schmetterling'],['모자','moja','Hut'],['기차','gicha','Zug'],['나라','nara','Land'],['다리','dari','Brücke / Bein'],['바지','baji','Hose'],['우유','uyu','Milch'],['가수','gasu','Sänger'],['나무','namu','Baum'],['다수','dasu','Mehrheit'],['마리','mari','Zählwort für Tiere'],['버스','beoseu','Bus'],['하루','haru','ein Tag'],['사자','saja','Löwe'],['여자','yeoja','Frau'],['고기','gogi','Fleisch'],['오이','oi','Gurke'],['포도','podo','Traube'],['모기','mogi','Mücke'],['커피','keopi','Kaffee'],['지도','jido','Karte'],['도로','doro','Straße'],['소파','sopa','Sofa'],['오리','ori','Ente'],['유리','yuri','Glas'],['요리','yori','Gericht / Kochen'],['두부','dubu','Tofu'],['아이','ai','Kind'],['마녀','manyeo','Hexe'],['미소','miso','Lächeln'],['소리','sori','Geräusch'],['하마','hama','Nilpferd'],['누나','nuna','ältere Schwester (sagt ein Mann)'],['자주','jaju','oft'],['마루','maru','Boden'],['도마','doma','Schneidebrett'],['기구','gigu','Gerät'],['머리','meori','Kopf / Haare'],['허리','heori','Taille'],['나사','nasa','Schraube'],['바보','babo','Narr'],['아기','agi','Baby'],['우주','uju','Weltall'],['가지','gaji','Aubergine'],['나이','nai','Alter'],['사료','saryo','Tierfutter'],['치마','chima','Rock']],
 'Fragen & Pronomen':[['저','jeo','ich (höflich)'],['우리','uri','wir'],['뭐','mwo','was'],['어디','eodi','wo'],['언제','eonje','wann'],['누구','nugu','wer'],['왜','wae','warum'],['얼마예요?','eolmayeyo','Wie viel kostet das?'],['어디예요?','eodiyeyo','Wo ist ...?']]
 };
-const THEMES=Object.keys(VOC);
+// ---------- Lehrbuch: Koreanisch leicht gemacht für Anfänger (20 Kapitel) ----------
+// Wortschatz und Sätze sind eigene Zusammenstellungen passend zum Kapitelthema.
+const KAP=[
+{n:1,t:'Begrüßung',ko:'안녕하세요? 저는 폴이에요.',rom:'annyeonghaseyo? jeoneun porieyo',de:'Hallo, ich bin Paul.',g:'-예요/이에요 = „sein"; 은/는 markiert das Thema des Satzes; Fragewörter 뭐 (was) und 어느 (welche/r).',
+ w:[['저','jeo','ich (höflich)'],['이름','ireum','Name'],['사람','saram','Person'],['나라','nara','Land'],['어느','eoneu','welche/r'],['한국','hanguk','Korea'],['독일','dogil','Deutschland'],['미국','miguk','USA'],['일본','ilbon','Japan'],['중국','jungguk','China'],['한국 사람','hanguk saram','Koreaner/in'],['독일 사람','dogil saram','Deutsche/r']],
+ p:[['저는 폴이에요.','jeoneun porieyo','Ich bin Paul.'],['이름이 뭐예요?','ireumi mwoyeyo','Wie heißt du?'],['어느 나라 사람이에요?','eoneu nara saramieyo','Aus welchem Land kommst du?'],['저는 독일 사람이에요.','jeoneun dogil saramieyo','Ich bin Deutsche/r.'],['만나서 반갑습니다.','mannaseo bangapseumnida','Freut mich, Sie kennenzulernen.']]},
+{n:2,t:'Berufe',ko:'아니요, 회사원이에요.',rom:'aniyo, hoesawonieyo',de:'Nein, ich bin Angestellter.',g:'네 = ja, 아니요 = nein; Fragen entstehen nur durch die Betonung am Satzende (Fragezeichen, Stimme hoch).',
+ w:[['직업','jigeop','Beruf'],['회사원','hoesawon','Angestellte/r'],['학생','haksaeng','Schüler/in, Student/in'],['선생님','seonsaengnim','Lehrer/in'],['의사','uisa','Arzt / Ärztin'],['요리사','yorisa','Koch / Köchin'],['주부','jubu','Hausfrau / Hausmann'],['기자','gija','Journalist/in'],['배우','baeu','Schauspieler/in'],['운전기사','unjeon gisa','Fahrer/in'],['네','ne','ja'],['아니요','aniyo','nein']],
+ p:[['직업이 뭐예요?','jigeobi mwoyeyo','Was bist du von Beruf?'],['아니요, 회사원이에요.','aniyo, hoesawonieyo','Nein, ich bin Angestellter.'],['학생이에요?','haksaengieyo','Bist du Student?'],['네, 학생이에요.','ne, haksaengieyo','Ja, ich bin Student.']]},
+{n:3,t:'Gegenstände',ko:'이게 뭐예요?',rom:'ige mwoyeyo',de:'Was ist das?',g:'이 (dies, hier), 그 (das, beim Gegenüber), 저 (das dort); 이/가 markiert das Subjekt.',
+ w:[['이거','igeo','dies (hier bei mir)'],['그거','geugeo','das (da bei dir)'],['저거','jeogeo','das (dort drüben)'],['책','chaek','Buch'],['가방','gabang','Tasche'],['시계','sigye','Uhr'],['우산','usan','Regenschirm'],['안경','angyeong','Brille'],['열쇠','yeolsoe','Schlüssel'],['지갑','jigap','Geldbörse'],['휴대폰','hyudaepon','Handy'],['의자','uija','Stuhl'],['책상','chaeksang','Schreibtisch']],
+ p:[['이게 뭐예요?','ige mwoyeyo','Was ist das?'],['이거는 책이에요.','igeoneun chaegieyo','Das ist ein Buch.'],['저게 뭐예요?','jeoge mwoyeyo','Was ist das dort?'],['누구 거예요?','nugu geoyeyo','Wem gehört das?']]},
+{n:4,t:'Orte',ko:'화장실이 어디에 있어요?',rom:'hwajangsiri eodie isseoyo',de:'Wo ist die Toilette?',g:'있어요 = es gibt / ist da, 없어요 = es gibt nicht; 에 gibt den Ort an; 어디 = wo.',
+ w:[['화장실','hwajangsil','Toilette'],['어디','eodi','wo'],['여기','yeogi','hier'],['저기','jeogi','dort'],['학교','hakgyo','Schule'],['병원','byeongwon','Krankenhaus'],['은행','eunhaeng','Bank'],['식당','sikdang','Restaurant'],['약국','yakguk','Apotheke'],['편의점','pyeonuijeom','Minimarkt'],['카페','kape','Café'],['위','wi','oben, auf'],['아래','arae','unten'],['옆','yeop','neben'],['앞','ap','vor'],['뒤','dwi','hinter']],
+ p:[['화장실이 어디에 있어요?','hwajangsiri eodie isseoyo','Wo ist die Toilette?'],['2층에 있어요.','i cheunge isseoyo','Im zweiten Stock.'],['은행 옆에 있어요.','eunhaeng yeope isseoyo','Neben der Bank.'],['여기에 없어요.','yeogie eopseoyo','Hier gibt es das nicht.']]},
+{n:5,t:'Beziehungen und Besitz',ko:'동생이 몇 명 있어요?',rom:'dongsaengi myeot myeong isseoyo',de:'Wie viele jüngere Geschwister hast du?',g:'있어요/없어요 auch für „haben / nicht haben"; 몇 = wie viele; Zählwörter: 명 (Personen), 개 (Dinge) mit rein koreanischen Zahlen.',
+ w:[['가족','gajok','Familie'],['부모님','bumonim','Eltern'],['동생','dongsaeng','jüngeres Geschwister'],['형','hyeong','älterer Bruder (sagt ein Mann)'],['오빠','oppa','älterer Bruder (sagt eine Frau)'],['누나','nuna','ältere Schwester (sagt ein Mann)'],['언니','eonni','ältere Schwester (sagt eine Frau)'],['남편','nampyeon','Ehemann'],['아내','anae','Ehefrau'],['아들','adeul','Sohn'],['딸','ttal','Tochter'],['몇','myeot','wie viele'],['명','myeong','Zählwort für Personen'],['개','gae','Zählwort für Dinge']],
+ p:[['동생이 몇 명 있어요?','dongsaengi myeot myeong isseoyo','Wie viele jüngere Geschwister hast du?'],['두 명 있어요.','du myeong isseoyo','Zwei.'],['형제가 없어요.','hyeongjega eopseoyo','Ich habe keine Geschwister.'],['가족이 몇 명이에요?','gajogi myeot myeongieyo','Wie groß ist deine Familie?']]},
+{n:6,t:'Telefonnummern',ko:'전화번호가 몇 번이에요?',rom:'jeonhwabeonhoga myeot beonieyo',de:'Wie ist deine Telefonnummer?',g:'Telefonnummern mit sino-koreanischen Zahlen, 0 = 공; 몇 번 = welche Nummer; 이/가 아니에요 = „ist nicht".',
+ w:[['전화번호','jeonhwabeonho','Telefonnummer'],['번','beon','Nummer'],['공','gong','null (in Nummern)'],['핸드폰','haendeupon','Handy'],['집 전화','jip jeonhwa','Festnetz'],['회사','hoesa','Firma'],['아니에요','anieyo','ist nicht'],['맞아요','majayo','stimmt'],['다시','dasi','noch einmal'],['일','il','eins'],['이','i','zwei'],['삼','sam','drei'],['사','sa','vier'],['오','o','fünf'],['육','yuk','sechs'],['칠','chil','sieben'],['팔','pal','acht'],['구','gu','neun']],
+ p:[['전화번호가 몇 번이에요?','jeonhwabeonhoga myeot beonieyo','Wie ist deine Telefonnummer?'],['공일공, 이삼사오, 육칠팔구예요.','gong-il-gong, i-sam-sa-o, yuk-chil-pal-gu-yeyo','010-2345-6789.'],['제 번호가 아니에요.','je beonhoga anieyo','Das ist nicht meine Nummer.'],['다시 한 번 말해 주세요.','dasi han beon malhae juseyo','Bitte noch einmal.']]},
+{n:7,t:'Geburtstag',ko:'생일이 며칠이에요?',rom:'saengiri myeochirieyo',de:'Wann hast du Geburtstag?',g:'Datum: 년 (Jahr) 월 (Monat) 일 (Tag) mit sino-koreanischen Zahlen; 언제 = wann; 에 = an (Zeitpunkt).',
+ w:[['생일','saengil','Geburtstag'],['며칠','myeochil','welcher Tag'],['언제','eonje','wann'],['년','nyeon','Jahr'],['월','wol','Monat'],['일','il','Tag'],['오늘','oneul','heute'],['내일','naeil','morgen'],['어제','eoje','gestern'],['요일','yoil','Wochentag'],['월요일','woryoil','Montag'],['화요일','hwayoil','Dienstag'],['수요일','suyoil','Mittwoch'],['목요일','mogyoil','Donnerstag'],['금요일','geumyoil','Freitag'],['토요일','toyoil','Samstag'],['일요일','iryoil','Sonntag'],['파티','pati','Party']],
+ p:[['생일이 며칠이에요?','saengiri myeochirieyo','Wann hast du Geburtstag?'],['3월 15일이에요.','samwol siboirieyo','Am 15. März.'],['오늘이 무슨 요일이에요?','oneuri museun yoirieyo','Welcher Wochentag ist heute?'],['생일 축하해요!','saengil chukahaeyo','Alles Gute zum Geburtstag!']]},
+{n:8,t:'Alltag',ko:'보통 아침 8시 30분에 회사에 가요.',rom:'botong achim yeodeol si samsip bune hoesae gayo',de:'Normalerweise gehe ich um 8:30 zur Arbeit.',g:'Uhrzeit: Stunden 시 mit rein koreanischen, Minuten 분 mit sino-koreanischen Zahlen; 부터 = ab, 까지 = bis.',
+ w:[['시','si','Uhr (Stunde)'],['분','bun','Minute'],['반','ban','halb'],['몇 시','myeot si','wie viel Uhr'],['아침','achim','Morgen'],['점심','jeomsim','Mittag'],['저녁','jeonyeok','Abend'],['보통','botong','normalerweise'],['일어나요','ireonayo','aufstehen'],['자요','jayo','schlafen'],['가요','gayo','gehen'],['와요','wayo','kommen'],['먹어요','meogeoyo','essen'],['부터','buteo','ab, von'],['까지','kkaji','bis']],
+ p:[['지금 몇 시예요?','jigeum myeot siyeyo','Wie spät ist es?'],['8시 30분이에요.','yeodeol si samsip bunieyo','Es ist 8:30.'],['보통 아침 7시에 일어나요.','botong achim ilgop sie ireonayo','Ich stehe normalerweise um 7 auf.'],['9시부터 6시까지 일해요.','ahop sibuteo yeoseot sikkaji ilhaeyo','Ich arbeite von 9 bis 6.']]},
+{n:9,t:'Verkehr und Verkehrsmittel',ko:'집에 지하철로 가요.',rom:'jibe jihacheollo gayo',de:'Ich fahre mit der U-Bahn nach Hause.',g:'(으)로 = mit (Verkehrsmittel); 어떻게 = wie; 얼마나 걸려요 = wie lange dauert es; Zeitdauer 시간 / 분.',
+ w:[['지하철','jihacheol','U-Bahn'],['버스','beoseu','Bus'],['택시','taeksi','Taxi'],['자전거','jajeongeo','Fahrrad'],['자동차','jadongcha','Auto'],['기차','gicha','Zug'],['비행기','bihaenggi','Flugzeug'],['걸어서','georeoseo','zu Fuß'],['어떻게','eotteoke','wie'],['얼마나','eolmana','wie lange'],['걸려요','geollyeoyo','dauern'],['역','yeok','Bahnhof'],['정류장','jeongnyujang','Haltestelle']],
+ p:[['집에 어떻게 가요?','jibe eotteoke gayo','Wie kommst du nach Hause?'],['지하철로 가요.','jihacheollo gayo','Mit der U-Bahn.'],['시간이 얼마나 걸려요?','sigani eolmana geollyeoyo','Wie lange dauert es?'],['30분쯤 걸려요.','samsip bunjjeum geollyeoyo','Etwa 30 Minuten.']]},
+{n:10,t:'Sachen kaufen',ko:'전부 얼마예요?',rom:'jeonbu eolmayeyo',de:'Wie viel macht das insgesamt?',g:'Preise mit sino-koreanischen Zahlen + 원; 얼마 = wie viel; Menge mit Zählwort 개 (rein koreanisch); 주세요 = bitte geben Sie.',
+ w:[['얼마','eolma','wie viel (Preis)'],['원','won','Won'],['전부','jeonbu','insgesamt'],['주세요','juseyo','bitte geben Sie mir'],['사과','sagwa','Apfel'],['바나나','banana','Banane'],['물','mul','Wasser'],['커피','keopi','Kaffee'],['빵','ppang','Brot'],['우유','uyu','Milch'],['비싸요','bissayo','teuer'],['싸요','ssayo','billig'],['카드','kadeu','Karte'],['현금','hyeongeum','Bargeld']],
+ p:[['이거 얼마예요?','igeo eolmayeyo','Wie viel kostet das?'],['전부 얼마예요?','jeonbu eolmayeyo','Wie viel insgesamt?'],['사과 세 개 주세요.','sagwa se gae juseyo','Drei Äpfel, bitte.'],['만 오천 원이에요.','man ocheon wonieyo','Das macht 15.000 Won.']]},
+{n:11,t:'Ein Arbeitstag',ko:'어디에서 저녁 식사해요?',rom:'eodieseo jeonyeok siksahaeyo',de:'Wo isst du zu Abend?',g:'Nomen + 하다 = Verben (일하다, 공부하다 …); 에서 = Ort einer Handlung; 하고 = und / mit.',
+ w:[['일해요','ilhaeyo','arbeiten'],['공부해요','gongbuhaeyo','lernen'],['운동해요','undonghaeyo','Sport machen'],['식사해요','siksahaeyo','eine Mahlzeit essen'],['요리해요','yorihaeyo','kochen'],['쇼핑해요','syopinghaeyo','einkaufen'],['전화해요','jeonhwahaeyo','telefonieren'],['청소해요','cheongsohaeyo','putzen'],['친구','chingu','Freund/in'],['집','jip','Zuhause'],['회사','hoesa','Firma'],['도서관','doseogwan','Bibliothek'],['같이','gachi','zusammen']],
+ p:[['어디에서 저녁 식사해요?','eodieseo jeonyeok siksahaeyo','Wo isst du zu Abend?'],['집에서 식사해요.','jibeseo siksahaeyo','Ich esse zu Hause.'],['친구하고 같이 운동해요.','chinguhago gachi undonghaeyo','Ich mache mit einem Freund Sport.'],['회사에서 일해요.','hoesaeseo ilhaeyo','Ich arbeite in der Firma.']]},
+{n:12,t:'Hobbys',ko:'매주 일요일에 영화를 봐요.',rom:'maeju iryoire yeonghwareul bwayo',de:'Jeden Sonntag sehe ich einen Film.',g:'Höflich-informelle Verbform -아/어요; 을/를 markiert das Objekt; Häufigkeit: 매일, 매주, 자주, 가끔.',
+ w:[['취미','chwimi','Hobby'],['영화','yeonghwa','Film'],['음악','eumak','Musik'],['운동','undong','Sport'],['여행','yeohaeng','Reise'],['사진','sajin','Foto'],['봐요','bwayo','sehen'],['들어요','deureoyo','hören'],['읽어요','ilgeoyo','lesen'],['해요','haeyo','machen'],['매일','maeil','jeden Tag'],['매주','maeju','jede Woche'],['자주','jaju','oft'],['가끔','gakkeum','manchmal']],
+ p:[['취미가 뭐예요?','chwimiga mwoyeyo','Was ist dein Hobby?'],['매주 일요일에 영화를 봐요.','maeju iryoire yeonghwareul bwayo','Jeden Sonntag sehe ich einen Film.'],['음악을 자주 들어요.','eumageul jaju deureoyo','Ich höre oft Musik.'],['책을 읽어요.','chaegeul ilgeoyo','Ich lese ein Buch.']]},
+{n:13,t:'Gesundheit',ko:'머리가 아파요.',rom:'meoriga apayo',de:'Mein Kopf tut weh.',g:'Beschreibende Verben (아프다 → 아파요, 피곤하다 → 피곤해요); Verneinung mit 안 vor dem Verb.',
+ w:[['머리','meori','Kopf'],['배','bae','Bauch'],['목','mok','Hals'],['눈','nun','Auge'],['코','ko','Nase'],['손','son','Hand'],['발','bal','Fuß'],['다리','dari','Bein'],['아파요','apayo','tut weh'],['감기','gamgi','Erkältung'],['열','yeol','Fieber'],['약','yak','Medikament'],['피곤해요','pigonhaeyo','müde sein'],['괜찮아요','gwaenchanayo','in Ordnung'],['안','an','nicht']],
+ p:[['어디가 아파요?','eodiga apayo','Wo tut es weh?'],['머리가 아파요.','meoriga apayo','Mein Kopf tut weh.'],['감기에 걸렸어요.','gamgie geollyeosseoyo','Ich habe mich erkältet.'],['안 아파요.','an apayo','Es tut nicht weh.']]},
+{n:14,t:'Reisen',ko:'지난주에 제주도에 여행 갔어요.',rom:'jinanjue jejudoe yeohaeng gasseoyo',de:'Letzte Woche bin ich nach Jeju gereist.',g:'Vergangenheit -았/었어요 (가요 → 갔어요, 먹어요 → 먹었어요); 동안 = lang / während; 제일 = am meisten.',
+ w:[['여행','yeohaeng','Reise'],['지난주','jinanju','letzte Woche'],['지난달','jinandal','letzter Monat'],['작년','jangnyeon','letztes Jahr'],['제주도','jejudo','Jeju-Insel'],['바다','bada','Meer'],['산','san','Berg'],['호텔','hotel','Hotel'],['경치','gyeongchi','Landschaft'],['갔어요','gasseoyo','bin gegangen / gefahren'],['봤어요','bwasseoyo','habe gesehen'],['먹었어요','meogeosseoyo','habe gegessen'],['재미있었어요','jaemiisseosseoyo','war toll / interessant'],['동안','dongan','lang, während'],['제일','jeil','am meisten']],
+ p:[['지난주에 제주도에 여행 갔어요.','jinanjue jejudoe yeohaeng gasseoyo','Letzte Woche bin ich nach Jeju gereist.'],['뭐가 제일 좋았어요?','mwoga jeil joasseoyo','Was hat dir am besten gefallen?'],['바다가 제일 좋았어요.','badaga jeil joasseoyo','Das Meer war am schönsten.'],['3일 동안 있었어요.','samil dongan isseosseoyo','Ich war drei Tage dort.']]},
+{n:15,t:'Pläne',ko:'내일 한국 음식을 만들 거예요.',rom:'naeil hanguk eumsigeul mandeul geoyeyo',de:'Morgen werde ich koreanisch kochen.',g:'Zukunft / feste Absicht -(으)ㄹ 거예요; 못 = nicht können vor dem Verb.',
+ w:[['계획','gyehoek','Plan'],['내일','naeil','morgen'],['주말','jumal','Wochenende'],['다음 주','daeum ju','nächste Woche'],['한국 음식','hanguk eumsik','koreanisches Essen'],['만들 거예요','mandeul geoyeyo','werde machen'],['갈 거예요','gal geoyeyo','werde gehen'],['볼 거예요','bol geoyeyo','werde sehen'],['쉴 거예요','swil geoyeyo','werde ausruhen'],['못','mot','nicht können'],['시간','sigan','Zeit'],['약속','yaksok','Verabredung, Termin'],['아마','ama','vielleicht']],
+ p:[['주말에 뭐 할 거예요?','jumare mwo hal geoyeyo','Was machst du am Wochenende?'],['내일 한국 음식을 만들 거예요.','naeil hanguk eumsigeul mandeul geoyeyo','Morgen werde ich koreanisch kochen.'],['시간이 없어서 못 가요.','sigani eopseoseo mot gayo','Ich habe keine Zeit, ich kann nicht.'],['집에서 쉴 거예요.','jibeseo swil geoyeyo','Ich werde mich zu Hause ausruhen.']]},
+{n:16,t:'Verabredungen',ko:'같이 영화 보러 갈 수 있어요?',rom:'gachi yeonghwa boreo gal su isseoyo',de:'Kannst du mit ins Kino?',g:'-(으)ㄹ 수 있어요/없어요 = können / nicht können; -(으)러 가요 = gehen, um zu …; -(으)ㄹ게요 = ich werde (Zusage).',
+ w:[['같이','gachi','zusammen'],['영화','yeonghwa','Film'],['갈 수 있어요','gal su isseoyo','kann gehen'],['갈 수 없어요','gal su eopseoyo','kann nicht gehen'],['보러 가요','boreo gayo','gehen, um zu sehen'],['먹으러 가요','meogeureo gayo','essen gehen'],['좋아요','joayo','gut, gern'],['미안해요','mianhaeyo','tut mir leid'],['언제','eonje','wann'],['만나요','mannayo','sich treffen'],['전화할게요','jeonhwahalgeyo','Ich rufe an.'],['시간 있어요?','sigan isseoyo','Hast du Zeit?']],
+ p:[['같이 영화 보러 갈 수 있어요?','gachi yeonghwa boreo gal su isseoyo','Kannst du mit ins Kino?'],['네, 좋아요.','ne, joayo','Ja, gern.'],['미안해요, 못 가요.','mianhaeyo, mot gayo','Tut mir leid, ich kann nicht.'],['7시에 만나요.','ilgop sie mannayo','Wir treffen uns um 7.']]},
+{n:17,t:'Vorlieben',ko:'미안하지만, 다시 한 번 말해 주세요.',rom:'mianhajiman, dasi han beon malhae juseyo',de:'Entschuldigung, bitte noch einmal.',g:'-아/어 주세요 = bitte machen Sie … für mich; -요? = Nachfrage / Bestätigung; 좋아해요 / 싫어해요 = mögen / nicht mögen.',
+ w:[['다시','dasi','noch einmal'],['한 번','han beon','einmal'],['말해 주세요','malhae juseyo','bitte sagen'],['천천히','cheoncheonhi','langsam'],['도와주세요','dowajuseyo','bitte helfen'],['기다려 주세요','gidaryeo juseyo','bitte warten'],['보여 주세요','boyeo juseyo','bitte zeigen'],['미안하지만','mianhajiman','Entschuldigung, aber'],['잠깐만요','jamkkanmanyo','einen Moment'],['알겠어요','algesseoyo','verstanden'],['모르겠어요','moreugesseoyo','ich weiß nicht'],['좋아해요','joahaeyo','mögen'],['싫어해요','sireohaeyo','nicht mögen']],
+ p:[['미안하지만, 다시 한 번 말해 주세요.','mianhajiman, dasi han beon malhae juseyo','Entschuldigung, bitte noch einmal.'],['천천히 말해 주세요.','cheoncheonhi malhae juseyo','Bitte sprich langsam.'],['뭘 좋아해요?','mwol joahaeyo','Was magst du?'],['커피를 좋아해요.','keopireul joahaeyo','Ich mag Kaffee.']]},
+{n:18,t:'Empfehlungen',ko:'저도 한국어를 배우고 싶어요.',rom:'jeodo hangugeoreul baeugo sipeoyo',de:'Ich möchte auch Koreanisch lernen.',g:'-고 싶어요 = möchte …; -아/어 보세요 = probieren Sie mal; 도 = auch.',
+ w:[['한국어','hangugeo','Koreanisch (Sprache)'],['배우고 싶어요','baeugo sipeoyo','möchte lernen'],['가고 싶어요','gago sipeoyo','möchte gehen'],['먹고 싶어요','meokgo sipeoyo','möchte essen'],['해 보세요','hae boseyo','probieren Sie mal'],['먹어 보세요','meogeo boseyo','probieren Sie (Essen)'],['저도','jeodo','ich auch'],['추천','chucheon','Empfehlung'],['김치','gimchi','Kimchi'],['불고기','bulgogi','Bulgogi'],['비빔밥','bibimbap','Bibimbap'],['맛있어요','masisseoyo','lecker'],['매워요','maewoyo','scharf'],['문화','munhwa','Kultur']],
+ p:[['저도 한국어를 배우고 싶어요.','jeodo hangugeoreul baeugo sipeoyo','Ich möchte auch Koreanisch lernen.'],['뭘 먹고 싶어요?','mwol meokgo sipeoyo','Was möchtest du essen?'],['비빔밥을 먹어 보세요.','bibimbabeul meogeo boseyo','Probier mal Bibimbap.'],['어디에 가고 싶어요?','eodie gago sipeoyo','Wohin möchtest du?']]},
+{n:19,t:'Taxi fahren',ko:'그다음에 오른쪽으로 가세요.',rom:'geudaeume oreunjjogeuro gaseyo',de:'Danach rechts abbiegen.',g:'-(으)세요 = höfliche Aufforderung; (으)로 = in Richtung; Fragen werden oft verkürzt (어디로 가세요?).',
+ w:[['택시','taeksi','Taxi'],['오른쪽','oreunjjok','rechts'],['왼쪽','oenjjok','links'],['똑바로','ttokbaro','geradeaus'],['그다음에','geudaeume','danach'],['가세요','gaseyo','fahren / gehen Sie'],['세워 주세요','sewo juseyo','bitte anhalten'],['사거리','sageori','Kreuzung'],['신호등','sinhodeung','Ampel'],['건너편','geonneopyeon','gegenüber'],['공항','gonghang','Flughafen'],['호텔','hotel','Hotel'],['내려요','naeryeoyo','aussteigen']],
+ p:[['어디로 가세요?','eodiro gaseyo','Wohin soll es gehen?'],['공항으로 가 주세요.','gonghangeuro ga juseyo','Zum Flughafen, bitte.'],['그다음에 오른쪽으로 가세요.','geudaeume oreunjjogeuro gaseyo','Danach rechts abbiegen.'],['여기에서 세워 주세요.','yeogieseo sewo juseyo','Bitte hier anhalten.']]},
+{n:20,t:'Reservieren',ko:'성함이 어떻게 되세요?',rom:'seonghami eotteoke doeseyo',de:'Wie ist Ihr Name?',g:'Höfliche Sprache für den Gesprächspartner: -(으)세요, ehrerbietige Wörter (성함 statt 이름, 분 statt 명, 드세요 statt 먹어요).',
+ w:[['예약','yeyak','Reservierung'],['성함','seongham','Name (ehrerbietig)'],['어떻게 되세요?','eotteoke doeseyo','Wie lautet …? (höflich)'],['몇 분','myeot bun','wie viele Personen (höflich)'],['식당','sikdang','Restaurant'],['자리','jari','Platz, Tisch'],['창가','changga','Fensterplatz'],['연락처','yeollakcheo','Kontaktnummer'],['계세요','gyeseyo','sein / da sein (ehrerbietig)'],['드세요','deuseyo','essen (ehrerbietig)'],['감사합니다','gamsahamnida','Danke (formell)'],['죄송합니다','joesonghamnida','Entschuldigung (formell)']],
+ p:[['성함이 어떻게 되세요?','seonghami eotteoke doeseyo','Wie ist Ihr Name?'],['예약하고 싶어요.','yeyakhago sipeoyo','Ich möchte reservieren.'],['몇 분이세요?','myeot bunieyo','Für wie viele Personen?'],['세 명이에요.','se myeongieyo','Für drei Personen.']]}
+];
+KAP.forEach(k=>{VOC['Kapitel '+k.n+' – '+k.t]=k.w.concat(k.p)});
+const KAPKEYS=KAP.map(k=>'Kapitel '+k.n+' – '+k.t);
+
+// ---------- Lehrbuch-Ansicht ----------
+let kcur=null;
+(function(){
+  const l=document.getElementById('klist');
+  KAP.forEach(k=>{
+    const b=document.createElement('button');b.className='krow';
+    b.innerHTML=`<span class="kn">${k.n}</span><span><b>${k.t}</b><small>${k.ko}</small></span>`;
+    b.onclick=()=>kshow(k);l.appendChild(b);
+  });
+})();
+function kshow(k){
+  kcur=k;
+  document.getElementById('klist').style.display='none';
+  const d=document.getElementById('kdetail');d.style.display='';
+  d.innerHTML=`<button class="btn ghost" id="kback" style="margin-bottom:12px">‹ Alle Kapitel</button>
+  <div class="kt">Kapitel ${k.n} · ${k.t}</div>
+  <div class="card"><div class="q vq" style="font-size:30px">${k.ko}</div><div class="ask">${k.rom}<br>${k.de}</div><button class="spk" data-ko="${k.ko}" style="margin-top:10px">🔊 Anhören</button></div>
+  <div class="info" style="margin-top:12px"><b>Grammatik:</b> ${k.g}</div>
+  <h2>Wortschatz</h2><div id="kw"></div>
+  <h2>Schlüsselsätze</h2><div id="kp"></div>
+  <button class="btn" id="kpract" style="margin-top:16px">Dieses Kapitel üben</button>`;
+  const row=(w,el)=>{const r=document.createElement('button');r.className='vrow';r.innerHTML=`<span class="ko">${w[0]}</span><span class="ro">${w[1]}</span><span class="de">${w[2]}</span>`;r.onclick=()=>say(w[0]);el.appendChild(r)};
+  k.w.forEach(w=>row(w,document.getElementById('kw')));k.p.forEach(w=>row(w,document.getElementById('kp')));
+  d.querySelector('.spk').onclick=e=>say(e.currentTarget.dataset.ko);
+  document.getElementById('kback').onclick=()=>{d.style.display='none';document.getElementById('klist').style.display=''};
+  document.getElementById('kpract').onclick=()=>{
+    document.getElementById('vsrc').value='Kapitel '+k.n+' – '+k.t;
+    document.querySelector('#menu [data-v=voc]').click();
+    document.querySelector('#vmode [data-m=cards]').click();
+  };
+  window.scrollTo(0,0);
+}
+
+const THEMES=Object.keys(VOC).filter(t=>!t.startsWith('Kapitel '));
+(function(){const sel=document.getElementById('vsrc');KAPKEYS.forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent='Lehrbuch: '+k;sel.appendChild(o)});sel.onchange=vrestart})();
 let vmode='list',vdir='kd',vcur=null,vlock=false,vok=0,vall=0,vqueue=[],flipped=false;
 const vthemes=document.getElementById('vthemes');
 THEMES.forEach((t,i)=>{
@@ -547,7 +778,11 @@ THEMES.forEach((t,i)=>{
   l.firstChild.onchange=vrestart;vthemes.appendChild(l);
 });
 function vpool(){
+  const src=document.getElementById('vsrc').value;
+  document.getElementById('vthemes').style.display=src?'none':'';
+  if(src)return VOC[src].slice();
   let p=[];[...vthemes.querySelectorAll('input')].forEach((c,i)=>{if(c.checked)p=p.concat(VOC[THEMES[i]])});
+  const seen=new Set();p=p.filter(w=>{if(seen.has(w[0]))return false;seen.add(w[0]);return true});
   if(p.length<4)p=VOC[THEMES[0]].concat(VOC[THEMES[2]]);
   return p;
 }
@@ -566,8 +801,10 @@ function vrestart(){
 }
 function vlist(){
   const el=document.getElementById('v-list');el.innerHTML='';
-  THEMES.forEach((t,i)=>{
-    if(!vthemes.querySelectorAll('input')[i].checked)return;
+  const src=document.getElementById('vsrc').value;
+  const themes=src?[src]:THEMES;
+  themes.forEach((t,i)=>{
+    if(!src&&!vthemes.querySelectorAll('input')[i].checked)return;
     const h=document.createElement('h2');h.textContent=t;el.appendChild(h);
     VOC[t].forEach(w=>{
       const r=document.createElement('div');r.className='vrow';
@@ -618,6 +855,29 @@ function vmc(){
 document.getElementById('vq-say').onclick=()=>{if(vcur)say(vcur[0])};
 vrestart();
 
+// Silben-Frage: Ablenker teilen Konsonant oder Vokal mit der Lösung
+function sq(){
+  ncur=null;const c=rnd(SYL);cur=c;
+  const q=document.getElementById('q'),ask=document.getElementById('ask');
+  const near=SYL.filter(x=>x!==c&&(x[2]===c[2]||x[3]===c[3]));
+  const set=new Set([c]);while(set.size<4)set.add(rnd(near));
+  const opts=[...set].sort(()=>Math.random()-.5);
+  if(dir==='kd'){q.textContent=c[0];q.classList.remove('lat');ask.textContent='Silbe – wie wird sie umschrieben?'}
+  else{q.textContent=c[1];q.classList.add('lat');ask.textContent='Welche Silbe ist das?'}
+  document.getElementById('q-say').style.display='';
+  const o=document.getElementById('opts');o.innerHTML='';
+  opts.forEach(x=>{
+    const b=document.createElement('button');b.textContent=dir==='kd'?x[1]:x[0];b.dataset.k=dir==='kd'?x[1]:x[0];
+    b.onclick=()=>{
+      if(locked)return;locked=true;all++;
+      if(x===c){ok++;streak++;b.classList.add('ok')}else{streak=0;b.classList.add('no');[...o.children].forEach(y=>{if(y.dataset.k===(dir==='kd'?c[1]:c[0]))y.classList.add('ok')})}
+      say(c[0],0.8);
+      document.getElementById('sc-ok').textContent=ok;document.getElementById('sc-all').textContent=all;document.getElementById('sc-streak').textContent=streak;
+      setTimeout(next,x===c?700:1500);
+    };
+    o.appendChild(b);
+  });
+}
 // ---------- Zahlen üben (im Üben-Tab) ----------
 let nsys='sino',nrange=10,ncur=null;
 function segInit(id,cb){document.querySelectorAll('#'+id+' button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.toggle('on',x===b));cb(b.dataset);})}
